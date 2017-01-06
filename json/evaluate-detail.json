@@ -1,0 +1,21 @@
+{
+	"status": "100",
+	"msg": "操作成功",
+	"data": {
+		"orderId": "1259",
+		"orderNbr": "DD123456789",
+		"createdDate": "2016-05-30 20:25:30",
+		"evaluates": {
+			"id": "10000",
+			"pictures": "http://img01.ydm01.com/images/729/20160425/201604251641016825.jpg,http://img01.ydm01.com/images/729/20160425/201604251641016825.jpg",
+			"name": "任*义",
+			"status": "0",
+			"level": "4",
+			"content": "收到货了，很满意！"
+		},
+		"replys": {
+			"id": "100001",
+			"content": "感谢您的支持，谢谢！"
+		}
+	}
+}

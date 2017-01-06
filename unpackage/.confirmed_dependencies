@@ -1,0 +1,70 @@
+{
+	"template/home/index.html": {
+		"resources": [
+			"css/style.css",
+			"js/mui.min.js",
+			"css/mui.min.css",
+			"fonts/mui.ttf",
+			"images/back-top.png",
+			"json/home.json",
+			"template/home/homelist.html"
+		],
+		"refer": [
+			"template/home/homelist.html"
+		]
+	},
+	"index.html": {
+		"resources": [
+			"template/home/index.html",
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"fonts/iconfont.css",
+			"fonts/iconfont.ttf"
+		],
+		"refer": [
+			"template/me/index.html",
+			"template/home/index.html",
+			"template/order/index.html"
+		]
+	},
+	"template/home/homelist.html": {
+		"resources": [
+			"json/home.json",
+			"fonts/mui.ttf",
+			"images/back-top.png",
+			"js/mui.min.js",
+			"css/mui.min.css",
+			"css/style.css",
+			"images/icon-nav.png"
+		],
+		"refer": [
+			"template/home/goodslist.html",
+			"template/home/reporterror.html"
+		]
+	},
+	"template/me/index.html": {
+		"resources": [
+			"js/mui.min.js",
+			"css/mui.min.css"
+		]
+	},
+	"template/home/goodslist.html": {
+		"resources": [
+			"js/mui.min.js",
+			"css/mui.min.css",
+			"css/style.css",
+			"fonts/mui.ttf",
+			"images/icon-back.png"
+		]
+	},
+	"template/home/reporterror.html": {
+		"resources": [
+			"js/mui.min.js",
+			"images/icon-back.png",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"css/style.css"
+		]
+	}
+}
