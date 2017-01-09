@@ -3,19 +3,151 @@
 
 	<head>
 		<meta charset="UTF-8">
-		<title></title>
+		<title>我的</title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<link href="../../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../css/mui.picker.min.css" />
+		<link rel="stylesheet" href="../../css/mestyle.css" />
 	</head>
 
 	<body>
-		<div class="mui-content">
-			我的
+		<header class="mui-bar mui-bar-nav jfbar">
+			<h1 class="mui-title nav-title">结算</h1>   
+			<a class="nav-right">退出</a>
+		</header>
+		<div class="mui-content mui-scroll-wrapper">
+			<div class="mui-scroll">
+				<div class="area1">
+					<span class="date"><span class="mui-icon mui-icon-camera"></span>日期</span>
+					<!--<span class="mui-right">请选择日期<span class="mui-icon mui-icon-arrowright"></span></span>-->
+					<button class="start-date">请选择开始日期</button>
+					<button class="end-date">请选择结束日期</button>
+				</div>
+				<div class="area2">
+					<div class="area2-item">
+						<span class="area2-item-left"><span class="mui-icon mui-icon-location-filled"></span>区域</span>
+						<span class="area2-item-right">洪山区</span></span>
+						<div class="line"></div>
+					</div>  
+					<div class="area2-item">
+						<span class="area2-item-left"><span class="mui-icon mui-icon-person-filled"></span>姓名</span>
+						<span class="area2-item-right">彭于晏</span></span>
+						<div class="line"></div>
+					</div>  
+					<div class="area2-item">
+						<span class="area2-item-left"><span class="mui-icon mui-icon-phone-filled"></span>电话</span>
+						<span class="area2-item-right">13296664426</span></span>
+						<!--<div class="line"></div>-->
+					</div>  
+				</div>  
+				<div class="area3">  
+					<div class="area3-header line-active">
+						<span class="area3-item">项目</span>
+						<span class="area3-item">数量</span>
+						<span class="area3-item">金额</span>  
+					</div>
+					<ul class="mui-table-view">  
+						<li class="mui-table-view-cell mui-collapse-content"> 
+							<span class="area3-item">货到付款</span>
+							<span class="area3-item">33</span>
+							<span class="area3-item">￥5300</span>  
+						</li>
+						<li class="mui-table-view-cell mui-collapse-content line-active"> 
+							<span class="area3-item">微信支付</span>
+							<span class="area3-item">33</span>
+							<span class="area3-item">￥5300</span>  
+						</li>
+						<li class="mui-table-view-cell mui-collapse-content"> 
+							<span class="area3-item">支付宝</span>
+							<span class="area3-item">33</span>
+							<span class="area3-item">￥5300</span>  
+						</li>
+						<li class="mui-table-view-cell mui-collapse-content line-active"> 
+							<span class="area3-item">余额支付</span>
+							<span class="area3-item">33</span>
+							<span class="area3-item">￥5300</span>  
+						</li>
+						<li class="mui-table-view-cell mui-collapse-content"> 
+							<span class="area3-item">合计</span>
+							<span class="area3-item">133</span>
+							<span class="area3-item">￥4300</span>  
+						</li>
+					</ul>
+				</div>
+				<div class="area4">
+					 <div class="icon-money">我的提成</div>
+					 <div class="money">￥3200.6</div> 
+				</div> 
+			</div>
 		</div>
 	</body>
 	<script src="../../js/mui.min.js"></script>
-	<script type="text/javascript">
-		mui.init()
+	<script type="text/javascript" src="../../js/mui.picker.min.js" ></script>
+	<script type="text/javascript"> 
+		mui.init();
+		mui('.mui-scroll-wrapper').scroll({
+			 scrollY: true, //是否竖向滚动
+			 scrollX: false, //是否横向滚动
+			 startX: 0, //初始化时滚动至x
+			 startY: 0, //初始化时滚动至y
+			 indicators: true, //是否显示滚动条
+			 deceleration:0.0004, //阻尼系数,系数越小滑动越灵敏
+			 bounce: true //是否启用回弹
+		});
+		var startDate = null;
+		var endDate = null;
+		document.querySelector('.start-date').addEventListener('tap',function(){
+			startDate = document.querySelector('.start-date');
+			var startpicker = new mui.DtPicker({
+			    type: "date",//设置日历初始视图模式 
+			    beginDate: new Date(1970, 01, 01),//设置开始日期 
+			    endDate: new Date(2099, 01, 01),//设置结束日期 
+			    labels: ['年', '月', '日'],//设置默认标签区域提示语 
+			}) 
+			startpicker.show(function(e) {
+//			    console.log(e);
+			    startDate.innerText = e;
+			    startpicker.dispose()
+			}) 
+		})
+		document.querySelector('.end-date').addEventListener('tap',function(){
+			endDate = document.querySelector('.end-date');
+			var endpicker = new mui.DtPicker({
+			    type: "date",//设置日历初始视图模式 
+			    beginDate: new Date(1970, 01, 01),//设置开始日期 
+			    endDate: new Date(2099, 01, 01),//设置结束日期 
+			    labels: ['年', '月', '日'],//设置默认标签区域提示语 
+			}) 
+			endpicker.show(function(e) {
+//			    console.log(e);
+			    endDate.innerText = e;
+			    endpicker.dispose()
+			}) 
+		})
+		//退出按钮点击事件
+		document.querySelector('.nav-right').addEventListener('tap', function(event) {
+			plus.storage.setItem("lauchFlag", "false"); 
+//			console.log("退出登录")
+			launchScreen(); // 退出登录后进入登录页面
+		});
+		function launchScreen() {
+			//读取本地存储，检查是否为首次启动
+			var showGuide = plus.storage.getItem("lauchFlag");
+//			console.log(showGuide);
+			if(showGuide == "true"){ 
+			}else{
+				//显示启动导航
+				mui.openWindow({
+					id:'login',
+					url:'../login/login.html',
+					show:{
+						aniShow:'none'
+					},
+					waiting:{
+						autoShow:false
+					}
+				});
+			}
+		}
 	</script>
-
 </html>

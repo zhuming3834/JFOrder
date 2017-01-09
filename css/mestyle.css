@@ -1,0 +1,187 @@
+.jfbar{
+	box-shadow: none;
+	background-color: #007dff;
+}
+.nav-back{
+	position: absolute;
+	padding-left: 15px;
+	left: 10px;
+	height: 44px;
+	line-height: 44px;
+	color: white;
+	width: 44px;
+	text-align: center;
+	background-image: url(../images/icon-back.png);
+	background-position: 10px center;
+	background-repeat: no-repeat;
+	background-size: 15px 22px;
+}
+.nav-title{
+	color: white;
+	font-size: 20px;
+	height: 44px !important;
+	line-height: 44px !important;
+	padding: 0px !important;
+	left: 80px !important;
+	right: 80px !important;
+}
+.nav-right{
+	position: absolute;
+	right: 10px;
+	height: 44px;
+	line-height: 44px;
+	color: white;
+	width: 50px;
+	text-align: center;
+}
+body{
+	background-color: #d9dcdc !important;
+	color: #555555;
+}
+.mui-content{
+	background-color: transparent !important;
+	font-size: 15px;
+}
+.area1{
+	height: 44px;
+	padding: 0px 10px;
+	background-color: white;
+}
+.area1 span{
+	height: 44px;
+	line-height: 44px;
+}
+.mui-right{
+	float: right;
+	color: #9a9a9a;
+}
+.start-date,.end-date{
+	height: 40px;
+	margin-top: 2px;
+	font-size: 13px;
+	padding: 0px 3px;
+	width: 100px;
+}
+button{
+	height: 40px;
+}
+.start-date{
+	margin-left: calc(100% - 58px - 210px);
+}
+.end-date{
+	float: right;
+}
+.area2{
+	padding: 0px 10px;
+	margin-top: 10px;
+	/*height: 44px;*/
+	background-color: white;
+}
+.area2-item{
+	height: 44px;
+	position: relative;
+}
+.area2-item span{
+	height: 44px;
+	line-height: 44px;
+}
+.area2-item-right{
+	float: right;
+	color: #9a9a9a;
+	/*margin-right: 10px;*/
+}
+.line{
+	position: absolute;
+	height: 1px;
+	width: calc(100% - 25px);
+	background-color: #d9dcdc; 
+	top: 43px; 
+	right: 0px;
+}
+.area3{
+	background-color: white;
+}
+.area3-header{
+	margin-top: 10px;
+	height: 40px;
+	line-height: 40px;
+	text-align: center;
+}
+.area3-item{
+	width: calc(100% / 3);
+	height: 40px;
+	display: inline-block;
+	float: left;
+	line-height: 40px;
+	text-align: center;
+} 
+.line-active{
+	background-color: #F1F9FF;
+}
+.mui-table-view:before{
+	height: 0px;
+}
+.mui-table-view:after{
+	height: 0px;
+}
+.mui-table-view-cell{
+	height: 40px;
+	margin: 0px;
+	padding: 0px;
+}
+.mui-table-view-cell:after{
+	height: 0px;
+}
+.area4{
+	height: 120px;
+	/*padding: 15px 0px;*/
+	background-color: white;
+	margin-top: 10px;
+	margin-bottom: 50px;
+	text-align: center;
+	position: relative;
+}
+.icon-money{
+	text-align: center;
+	/*height: 20px;*/ 
+	padding: 74px 0px 0px 0px;
+	background-image: url(../images/icon-money.png);
+	background-position: center 10px;
+	background-repeat: no-repeat; 
+	background-size: 64px 64px;
+}
+.input-area{
+	width: calc(100% - 20px);
+	margin-left: 10px;
+	background-color: white;
+	border-radius: 3px;
+	margin-top: 10px;
+	padding: 0px 5px;
+	height: 90px;
+}
+.userid-area{
+	border-bottom: 1px solid #EEEEEE;
+}
+.userid-area span{
+	font-size: 15px;
+	height: 44px;
+	line-height: 44px;
+}
+input[type=text]{
+	width: calc(100% - 70px);
+	height: 30px;
+	line-height: 30px;
+	float: right; 
+	border: none;
+	margin: 0px;
+	margin-top: 7px; 
+}
+.login-btn{
+	width: calc(100% - 20px);
+	margin: 10px 10px;
+	height: 44px;
+	color: white;
+	font-weight: 800;
+	font-size: 18px;
+	background-color: #007dff;
+}

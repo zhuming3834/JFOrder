@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>登录</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../css/mestyle.css" />
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav jfbar">
+			<h1 class="mui-title nav-title">登录</h1>   
+		</header> 
+		<div class="mui-content">
+			<div class="input-area">
+				<div class="userid-area">
+					<span class="mui-icon mui-icon-person-filled"><span>账号</span></span>
+					<input id="userid" type="text" placeholder="请输入账号" />
+				</div>
+				<div class="userid-area" style="border-bottom: none;">
+					<span class="mui-icon mui-icon-locked"><span>密码</span></span>
+					<input id="pw" type="text" placeholder="请输入密码" />
+				</div>
+			</div>
+			<button id="login" type="button" class="login-btn">登录</button>
+		</div>
+	</body>
+	<script src="../../js/mui.min.js"></script>
+	<script type="text/javascript"> 
+		mui.init();
+		//登录按钮点击事件
+		document.getElementById("login").addEventListener('tap', function(event) {
+			plus.storage.setItem("lauchFlag", "true"); 
+			plus.webview.currentWebview().close();  
+//			console.log("登录");
+		});
+	</script>
+</html>

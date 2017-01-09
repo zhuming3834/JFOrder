@@ -6,7 +6,7 @@
 		<title>首页</title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<link href="../../css/mui.min.css" rel="stylesheet" />
-		<link rel="stylesheet" href="../../css/style.css" />
+		<link rel="stylesheet" href="../../css/homestyle.css" />
 	</head>
 
 	<body>
@@ -27,6 +27,7 @@
 				    			<p class="address">
 				    				<span class="order-address">地址: 武昌 洪山区洪山区 南湖大道6号 湖北省农科院行政大楼</span>
 				    				<span class="order-sender">(配送人:胡俊杰)</span>
+				    				<span class="address-nav"></span>
 				    			</p>
 				    		</div>
 				    		<div class="order-mark">订单备注:请将车厘子分两包包装 三斤一包</div>
@@ -227,7 +228,7 @@
 				    			+ '<p class="about-order">'
 				    			+ '<span class="customer-name"><span class="mui-icon mui-icon-person"></span>' + item.name + '</span>'
 				    			+ '<span class="customer-tel"' + 'data-tel="' + item.tel + '"' + 'data-name="' + item.name + '"><span class="mui-icon mui-icon-phone"></span>' + item.tel + '</span></p>'
-				    			+ '<p class="address"' + 'data-address="' + item.address + '">'
+				    			+ '<p class="address"><span class="address-nav"' + 'data-address="' + item.address + '"></span>'
 				    			+ '<span class="order-address"><span class="mui-icon mui-icon-map"></span>' + address + '</span>'
 				    			+ '<span class="order-sender">'+ sender + '</span></p></div>'
 				    			+ '<div class="order-mark">' + mark + '</div>'
@@ -248,8 +249,8 @@
 		mui('.mui-content').on('tap','.customer-tel',function(){
 			var phoneNumber = this.getAttribute('data-tel');
 			var name = this.getAttribute('data-name');
-			console.log("tel = " + phoneNumber);
-			console.log("name = " + name);
+//			console.log("tel = " + phoneNumber);
+//			console.log("name = " + name);
 			var btn = ["取消","确定"];
 			mui.confirm(phoneNumber,'确定呼叫:' + name,btn,function(e){
 				if(e.index == 1){
@@ -258,9 +259,9 @@
 			});
 		}) 
 		// 到百度地图
-		mui('.mui-content').on('tap','.address',function(){
+		mui('.mui-content').on('tap','.address-nav',function(){
 			var address = this.getAttribute('data-address');
-			console.log("address = " + address);
+//			console.log("address = " + address);
 			// http://ask.dcloud.net.cn/question/14404
 			// 调起百度地图 
 			// http://lbsyun.baidu.com/index.php?title=uri/api/android
@@ -278,13 +279,13 @@
 		// 送货按钮
 		mui('.mui-content').on('tap','.sengding',function(){
 			var parent = this.getAttribute('button-send-id');
-			console.log("id = " + parent);
+//			console.log("id = " + parent);
 			
 		}) 
 		// 报错按钮
 		mui('.mui-content').on('tap','.button-error',function(){
 			var id = this.getAttribute('data-button-error-id');
-			console.log("id = " + id);
+//			console.log("id = " + id);
 			var animationType = "slide-in-right";//页面显示动画，默认为”slide-in-right“；
 			var animationTime = 100; //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200
 			mui.openWindow({
@@ -303,7 +304,7 @@
 		// 商品按钮
 		mui('.mui-content').on('tap','.button-goods',function(){
 			var id = this.getAttribute('data-button-goods-id');
-			console.log("订单ID = " + id + localStorage.getItem(id));
+//			console.log("订单ID = " + id + localStorage.getItem(id));
 			
 			var animationType = "slide-in-right";//页面显示动画，默认为”slide-in-right“；
 			var animationTime = 100; //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200

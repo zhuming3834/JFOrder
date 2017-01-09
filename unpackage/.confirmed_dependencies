@@ -7,7 +7,8 @@
 			"fonts/mui.ttf",
 			"images/back-top.png",
 			"json/home.json",
-			"template/home/homelist.html"
+			"template/home/homelist.html",
+			"css/homestyle.css"
 		],
 		"refer": [
 			"template/home/homelist.html"
@@ -36,7 +37,8 @@
 			"js/mui.min.js",
 			"css/mui.min.css",
 			"css/style.css",
-			"images/icon-nav.png"
+			"images/icon-nav.png",
+			"css/homestyle.css"
 		],
 		"refer": [
 			"template/home/goodslist.html",
@@ -46,7 +48,17 @@
 	"template/me/index.html": {
 		"resources": [
 			"js/mui.min.js",
-			"css/mui.min.css"
+			"css/mui.min.css",
+			"css/orderstyle.css",
+			"images/icon-back.png",
+			"css/mestyle.css",
+			"fonts/mui.ttf",
+			"images/icon-money.png",
+			"js/mui.picker.min.js",
+			"css/mui.picker.min.css"
+		],
+		"refer": [
+			"template/login/login.html"
 		]
 	},
 	"template/home/goodslist.html": {
@@ -55,7 +67,8 @@
 			"css/mui.min.css",
 			"css/style.css",
 			"fonts/mui.ttf",
-			"images/icon-back.png"
+			"images/icon-back.png",
+			"css/homestyle.css"
 		]
 	},
 	"template/home/reporterror.html": {
@@ -65,6 +78,36 @@
 			"fonts/mui.ttf",
 			"css/mui.min.css",
 			"css/style.css"
+		]
+	},
+	"template/order/index.html": {
+		"resources": [
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"css/style.css",
+			"css/orderstyle.css",
+			"js/mui.min.js"
+		],
+		"refer": [
+			"template/order/repolicy.html",
+			"template/home/goodslist.html"
+		]
+	},
+	"template/order/repolicy.html": {
+		"resources": [
+			"images/icon-back.png",
+			"css/orderstyle.css",
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css"
+		]
+	},
+	"template/login/login.html": {
+		"resources": [
+			"css/mestyle.css",
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css"
 		]
 	}
 }

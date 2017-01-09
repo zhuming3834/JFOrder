@@ -6,7 +6,7 @@
 		<title>商品列表</title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<link href="../../css/mui.min.css" rel="stylesheet" />
-		<link rel="stylesheet" href="../../css/style.css" />
+		<link rel="stylesheet" href="../../css/homestyle.css" />
 	</head>
 
 	<body>
@@ -14,32 +14,30 @@
 			<a class="mui-action-back mui-pull-left nav-back"></a>
 			<h1 class="mui-title nav-title">商品列表</h1>   
 		</header>
-		<div class="mui-content">
-			<div class="goods-list-header">
-				<span class="list-left list-common-style">编号</span>
-				<span class="list-center list-common-style">名称</span>
-				<span class="list-right list-common-style">数量</span>
-			</div>
-			<div class="mui-scroll-wrapper list-view">
-				<div class="mui-scroll">
-					<ul class="tableView"> 
-						<!--<li class="tableView-cell">
-							<span class="list-left list-common-style">编号</span>
-							<span class="list-center list-common-style">名称</span>
-							<span class="list-right list-common-style">数量</span>
-						</li>
-						<li class="tableView-cell-active">
-							<span class="list-left list-common-style">编号</span>
-							<span class="list-center list-common-style">名称</span>
-							<span class="list-right list-common-style">数量</span>
-						</li>
-						<li class="tableView-cell">
-							<span class="list-left list-common-style">编号</span>
-							<span class="list-center list-common-style">名称</span>
-							<span class="list-right list-common-style">数量</span>
-						</li>-->
-					</ul>
+		<div class="mui-content mui-scroll-wrapper">
+			<div class="mui-scroll">
+				<div class="goods-list-header">
+					<span class="list-left list-common-style">编号</span>
+					<span class="list-center list-common-style">名称</span>
+					<span class="list-right list-common-style">数量</span>
 				</div>
+				<ul class="tableView"> 
+					<!--<li class="tableView-cell">
+						<span class="list-left list-common-style">编号</span>
+						<span class="list-center list-common-style">名称</span>
+						<span class="list-right list-common-style">数量</span>
+					</li>
+					<li class="tableView-cell-active">
+						<span class="list-left list-common-style">编号</span>
+						<span class="list-center list-common-style">名称</span>
+						<span class="list-right list-common-style">数量</span>
+					</li>
+					<li class="tableView-cell">
+						<span class="list-left list-common-style">编号</span>
+						<span class="list-center list-common-style">名称</span>
+						<span class="list-right list-common-style">数量</span>
+					</li>-->
+				</ul>
 			</div>
 		</div>
 	</body>
@@ -47,6 +45,15 @@
 	<script type="text/javascript"> 
 		mui.init({
 			swipeBack: true, 
+		});
+		mui('.mui-scroll-wrapper').scroll({
+			 scrollY: true, //是否竖向滚动
+			 scrollX: false, //是否横向滚动
+			 startX: 0, //初始化时滚动至x
+			 startY: 0, //初始化时滚动至y
+			 indicators: true, //是否显示滚动条
+			 deceleration:0.0004, //阻尼系数,系数越小滑动越灵敏
+			 bounce: true //是否启用回弹
 		});
 		var self = null;
 		var table = document.body.querySelector('.tableView');

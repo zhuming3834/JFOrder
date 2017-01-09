@@ -1,0 +1,123 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>分单</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../css/orderstyle.css" />
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav jfbar">
+			<a class="mui-action-back mui-pull-left nav-back"></a>
+			<h1 class="mui-title nav-title2">分单</h1>   
+			<a class="nav-right">确定</a>
+		</header>
+		<div class="mui-content mui-scroll-wrapper">
+			<div class="mui-scroll">
+				<div class="goods-list-header">
+					<span class="list-left list-common-style">姓名</span>
+					<span class="list-right list-common-style">区域</span>
+				</div>
+				<ul class="tableView"> 
+					<li class="tableView-cell mui-input-row mui-radio mui-left">
+						<span class="list-common-style">耿旭东</span>
+						<span class="list-common-style">洪山区</span>
+						<input name="radio1" type="radio" checked="checked">
+					</li>
+					<li class="tableView-cell-active mui-input-row mui-radio mui-left">
+						<span class="list-common-style">耿旭东</span>
+						<span class="list-common-style">洪山区</span>
+						<input name="radio1" type="radio">
+					</li>
+					<li class="tableView-cell mui-input-row mui-radio mui-left">
+						<span class="list-common-style">耿旭东</span>
+						<span class="list-common-style">洪山区</span>
+						<input name="radio1" type="radio" checked="checked">
+					</li>
+					<li class="tableView-cell-active mui-input-row mui-radio mui-left">
+						<span class="list-common-style">耿旭东</span>
+						<span class="list-common-style">洪山区</span>
+						<input name="radio1" type="radio">
+					</li>
+					<li class="tableView-cell mui-input-row mui-radio mui-left">
+						<span class="list-common-style">耿旭东</span>
+						<span class="list-common-style">洪山区</span>
+						<input name="radio1" type="radio">
+					</li>
+					<li class="tableView-cell mui-input-row mui-radio mui-left">
+						<span class="list-common-style">耿旭东</span>
+						<span class="list-common-style">洪山区</span>
+						<input name="radio1" type="radio" checked="checked">
+					</li>
+					<li class="tableView-cell-active mui-input-row mui-radio mui-left">
+						<span class="list-common-style">耿旭东</span>
+						<span class="list-common-style">洪山区</span>
+						<input name="radio1" type="radio">
+					</li>
+					<li class="tableView-cell mui-input-row mui-radio mui-left">
+						<span class="list-common-style">耿旭东</span>
+						<span class="list-common-style">洪山区</span>
+						<input name="radio1" type="radio" checked="checked">
+					</li>
+					<li class="tableView-cell-active mui-input-row mui-radio mui-left">
+						<span class="list-common-style">耿旭东</span>
+						<span class="list-common-style">洪山区</span>
+						<input name="radio1" type="radio">
+					</li>
+					<li class="tableView-cell mui-input-row mui-radio mui-left">
+						<span class="list-common-style">耿旭东</span>
+						<span class="list-common-style">洪山区</span>
+						<input name="radio1" type="radio">
+					</li>
+					<li class="tableView-cell mui-input-row mui-radio mui-left">
+						<span class="list-common-style">耿旭东</span>
+						<span class="list-common-style">洪山区</span>
+						<input name="radio1" type="radio" checked="checked">
+					</li>
+					<li class="tableView-cell-active mui-input-row mui-radio mui-left">
+						<span class="list-common-style">耿旭东</span>
+						<span class="list-common-style">洪山区</span>
+						<input name="radio1" type="radio">
+					</li>
+					<li class="tableView-cell mui-input-row mui-radio mui-left">
+						<span class="list-common-style">耿旭东</span>
+						<span class="list-common-style">洪山区</span>
+						<input name="radio1" type="radio" checked="checked">
+					</li>
+					<li class="tableView-cell-active mui-input-row mui-radio mui-left">
+						<span class="list-common-style">耿旭东</span>
+						<span class="list-common-style">洪山区</span>
+						<input name="radio1" type="radio">
+					</li>
+					<li class="tableView-cell mui-input-row mui-radio mui-left">
+						<span class="list-common-style">耿旭东</span>
+						<span class="list-common-style">洪山区</span>
+						<input name="radio1" type="radio">
+					</li>
+				</ul>
+			</div>
+		</div>
+	</body>
+	<script src="../../js/mui.min.js"></script>
+	<script type="text/javascript"> 
+		mui.init({
+			swipeBack: true, 
+		});
+		mui('.mui-scroll-wrapper').scroll({
+			 scrollY: true, //是否竖向滚动
+			 scrollX: false, //是否横向滚动
+			 startX: 0, //初始化时滚动至x
+			 startY: 0, //初始化时滚动至y
+			 indicators: true, //是否显示滚动条
+			 deceleration:0.0004, //阻尼系数,系数越小滑动越灵敏
+			 bounce: true //是否启用回弹
+		});
+		// 左边 radio 点击事件
+		mui('.mui-content').on('change', 'input', function(){
+			console.log("22**" + this.value);
+		})
+	</script>
+</html>
