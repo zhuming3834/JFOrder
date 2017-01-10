@@ -1,0 +1,56 @@
+/*
+ * 公共的css文件，每个页面的html文件都需要包含这个css文件
+ */
+body {
+	background-color: #d9dcdc;
+	color: #555;
+	font-size: 15px
+}
+/* 导航栏的颜色 */
+.jfbar {
+	box-shadow: none;
+	background-color: #007dff
+}
+/* 导航栏的标题样式1 */
+.nav-title {
+	color: white;
+	font-size: 20px;
+	right: 100px!important;
+	left: 100px!important
+}
+/* 导航栏的标题样式2 */
+.nav-title2 {
+	color: white;
+	font-size: 20px;
+	height: 44px!important;
+	line-height: 44px!important;
+	padding: 0!important;
+	left: 20px!important;
+	right: 20px!important
+}
+/* 导航栏左边返回按钮 */
+.nav-back {
+	position: absolute;
+	padding-left: 15px;
+	left: 10px;
+	height: 44px;
+	line-height: 44px;
+	color: white;
+	width: 44px;
+	text-align: center;
+	background-image: url(../images/icon-back.png);
+	background-position: 10px center;
+	background-repeat: no-repeat;
+	background-size: 15px 22px
+}
+/* 导航栏右边字体 */
+.nav-right {
+	position: absolute;
+	right: 10px;
+	height: 44px;
+	line-height: 44px;
+	color: white;
+	width: 50px;
+	text-align: center;
+	font-size: 16px
+}

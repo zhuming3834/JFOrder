@@ -5,6 +5,8 @@
 		<meta charset="UTF-8">
 		<title>首页</title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 		<link href="../../css/mui.min.css" rel="stylesheet" />
 		<link rel="stylesheet" href="../../css/homestyle.css" />
 	</head>
@@ -131,6 +133,7 @@
 		</div>
 	</body>
 	<script src="../../js/mui.min.js"></script>
+	<script type="text/javascript" src="../../js/system.js" ></script>
 	<script type="text/javascript"> 
 		mui.init({
 			swipeBack: true, 
@@ -179,14 +182,19 @@
 			getData();
 		})
 		function getData(){
-			mui.ajax('../../json/home.json',{
+			// http://192.168.65.133:8000/webapp/login
+			// ../../json/home.json
+			mui.ajax(BASE_URL + LOGIN,{
 				data: {
-					userID: "123"  
+					usename:'baiyang01',
+					password:'123456'
 				},
-				dataType: 'json',
-				type: 'post',
-				timeout: 10000,
-				success: function(data){
+				dataType: DATA_TYPE,
+				type: REQUEST_TYPE,  
+				timeout: TIME_OUT,   
+				success: function(data){ 
+					console.log("status == " + data.status);
+					console.log("msg == " + data.msg);
 					if (data.status == 100) {
 //						table.innerHTML = "";
 						mui.each(data.data, function(index, item) {
@@ -241,7 +249,7 @@
 					}
 				},
 				error: function(xhr, type, errerThrown){
-					mui.toast('网络异常,请稍候再试');
+					mui.toast(NET_ERROR);
 				}
 			});
 		};

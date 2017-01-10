@@ -1,39 +1,6 @@
-.jfbar{
-	box-shadow: none;
-	background-color: #007dff;
-}
-.nav-title{
-	color: white;
-	font-size: 20px;
-	right: 100px !important;
-	left: 100px !important;
-}
-.nav-back{
-	position: absolute;
-	padding-left: 15px;
-	left: 10px;
-	height: 44px;
-	line-height: 44px;
-	color: white;
-	width: 44px;
-	text-align: center;
-	background-image: url(../images/icon-back.png);
-	background-position: 10px center;
-	background-repeat: no-repeat;
-	background-size: 15px 22px;
-}
-.nav-right{
-	position: absolute;
-	right: 10px;
-	height: 44px;
-	line-height: 44px;
-	color: white;
-	width: 50px;
-	text-align: center;
-}
-body{
-	background-color: #d9dcdc;
-}
+/*
+ * 首页这个模块的所有页面的css文件， 
+ */
 .mui-content{
 	background-color: #d9dcdc;
 	padding-bottom: 44px;

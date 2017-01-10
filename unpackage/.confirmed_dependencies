@@ -1,113 +1,119 @@
 {
-	"template/home/index.html": {
-		"resources": [
-			"css/style.css",
-			"js/mui.min.js",
-			"css/mui.min.css",
-			"fonts/mui.ttf",
-			"images/back-top.png",
-			"json/home.json",
-			"template/home/homelist.html",
-			"css/homestyle.css"
-		],
-		"refer": [
-			"template/home/homelist.html"
-		]
-	},
-	"index.html": {
-		"resources": [
-			"template/home/index.html",
-			"js/mui.min.js",
-			"fonts/mui.ttf",
-			"css/mui.min.css",
-			"fonts/iconfont.css",
-			"fonts/iconfont.ttf"
-		],
-		"refer": [
-			"template/me/index.html",
-			"template/home/index.html",
-			"template/order/index.html"
-		]
-	},
-	"template/home/homelist.html": {
-		"resources": [
-			"json/home.json",
-			"fonts/mui.ttf",
-			"images/back-top.png",
-			"js/mui.min.js",
-			"css/mui.min.css",
-			"css/style.css",
-			"images/icon-nav.png",
-			"css/homestyle.css"
-		],
-		"refer": [
-			"template/home/goodslist.html",
-			"template/home/reporterror.html"
-		]
-	},
-	"template/me/index.html": {
-		"resources": [
-			"js/mui.min.js",
-			"css/mui.min.css",
-			"css/orderstyle.css",
-			"images/icon-back.png",
-			"css/mestyle.css",
-			"fonts/mui.ttf",
-			"images/icon-money.png",
-			"js/mui.picker.min.js",
-			"css/mui.picker.min.css"
-		],
-		"refer": [
-			"template/login/login.html"
-		]
-	},
-	"template/home/goodslist.html": {
-		"resources": [
-			"js/mui.min.js",
-			"css/mui.min.css",
-			"css/style.css",
-			"fonts/mui.ttf",
-			"images/icon-back.png",
-			"css/homestyle.css"
-		]
-	},
-	"template/home/reporterror.html": {
-		"resources": [
-			"js/mui.min.js",
-			"images/icon-back.png",
-			"fonts/mui.ttf",
-			"css/mui.min.css",
-			"css/style.css"
-		]
-	},
-	"template/order/index.html": {
-		"resources": [
-			"fonts/mui.ttf",
-			"css/mui.min.css",
-			"css/style.css",
-			"css/orderstyle.css",
-			"js/mui.min.js"
-		],
-		"refer": [
-			"template/order/repolicy.html",
-			"template/home/goodslist.html"
-		]
-	},
-	"template/order/repolicy.html": {
-		"resources": [
-			"images/icon-back.png",
-			"css/orderstyle.css",
-			"js/mui.min.js",
-			"fonts/mui.ttf",
-			"css/mui.min.css"
-		]
-	},
-	"template/login/login.html": {
-		"resources": [
-			"css/mestyle.css",
-			"js/mui.min.js",
-			"fonts/mui.ttf",
-			"css/mui.min.css"
-		]
-	}
+  "template/home/index.html": {
+    "resources": [
+      "css/style.css",
+      "js/mui.min.js",
+      "css/mui.min.css",
+      "fonts/mui.ttf",
+      "images/back-top.png",
+      "json/home.json",
+      "template/home/homelist.html",
+      "css/homestyle.css",
+      "css/app.css"
+    ],
+    "refer": [
+      "template/home/homelist.html"
+    ]
+  },
+  "index.html": {
+    "resources": [
+      "template/home/index.html",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "fonts/iconfont.css",
+      "fonts/iconfont.ttf"
+    ],
+    "refer": [
+      "template/me/index.html",
+      "template/home/index.html",
+      "template/order/index.html",
+      "template/login/login.html"
+    ]
+  },
+  "template/home/homelist.html": {
+    "resources": [
+      "json/home.json",
+      "fonts/mui.ttf",
+      "images/back-top.png",
+      "js/mui.min.js",
+      "css/mui.min.css",
+      "css/style.css",
+      "images/icon-nav.png",
+      "css/homestyle.css"
+    ],
+    "refer": [
+      "template/home/goodslist.html",
+      "template/home/reporterror.html"
+    ]
+  },
+  "template/me/index.html": {
+    "resources": [
+      "js/mui.min.js",
+      "css/mui.min.css",
+      "css/orderstyle.css",
+      "images/icon-back.png",
+      "css/mestyle.css",
+      "fonts/mui.ttf",
+      "images/icon-money.png",
+      "js/mui.picker.min.js",
+      "css/mui.picker.min.css",
+      "css/app.css"
+    ],
+    "refer": [
+      "template/login/login.html"
+    ]
+  },
+  "template/home/goodslist.html": {
+    "resources": [
+      "js/mui.min.js",
+      "css/mui.min.css",
+      "css/style.css",
+      "fonts/mui.ttf",
+      "images/icon-back.png",
+      "css/homestyle.css",
+      "css/app.css"
+    ]
+  },
+  "template/home/reporterror.html": {
+    "resources": [
+      "js/mui.min.js",
+      "images/icon-back.png",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "css/style.css"
+    ]
+  },
+  "template/order/index.html": {
+    "resources": [
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "css/style.css",
+      "css/orderstyle.css",
+      "js/mui.min.js",
+      "css/app.css"
+    ],
+    "refer": [
+      "template/order/repolicy.html",
+      "template/home/goodslist.html"
+    ]
+  },
+  "template/order/repolicy.html": {
+    "resources": [
+      "images/icon-back.png",
+      "css/orderstyle.css",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "css/app.css"
+    ]
+  },
+  "template/login/login.html": {
+    "resources": [
+      "css/mestyle.css",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css"
+    ]
+  }
 }
