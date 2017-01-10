@@ -193,8 +193,6 @@
 				type: REQUEST_TYPE,  
 				timeout: TIME_OUT,   
 				success: function(data){ 
-					console.log("status == " + data.status);
-					console.log("msg == " + data.msg);
 					if (data.status == 100) {
 //						table.innerHTML = "";
 						mui.each(data.data, function(index, item) {
