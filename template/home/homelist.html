@@ -154,7 +154,7 @@
 		 */
 		function pulldownRefresh() {
 			setTimeout(function() {
-				getData();
+				refreshData();
 				mui('#pullrefresh').pullRefresh().endPulldownToRefresh(); //refresh completed
 			}, 1500);
 		}
@@ -179,78 +179,152 @@
 				});
 			}
 		mui.plusReady(function(){
-			getData();
+			// 进来显示登录缓存的数据
+			showData();
 		})
-		function getData(){
-			// http://192.168.65.133:8000/webapp/login
-			// ../../json/home.json
+		// 添加send自定义事件监听
+		window.addEventListener('login',function(event){
+		 	showData();
+		});
+		function showData(){
+			analyData(JSON.parse(localStorage.getItem(ORDERS)));
+		};
+		// 刷新数据
+		function refreshData(){
 			mui.ajax(BASE_URL + LOGIN,{
 				data: {
-					usename:'baiyang01',
-					password:'123456'
+					username: localStorage.getItem(USER_NAME),
+					pw: localStorage.getItem(PASS_WORD),
+					format: 'json'
 				},
 				dataType: DATA_TYPE,
 				type: REQUEST_TYPE,  
 				timeout: TIME_OUT,   
+				beforeSend: function(data) {
+					plus.nativeUI.showWaiting(REFRESH_ING);
+				},
 				success: function(data){ 
+					plus.nativeUI.closeWaiting();
 					if (data.status == 100) {
-//						table.innerHTML = "";
-						mui.each(data.data, function(index, item) {
-							var li = document.createElement('li');
-							li.orderId = item.id; /*订单id*/
-							li.goods = item.goods; /*商品列表*/
-							var jsonStr = JSON.stringify(item.goods);
-							localStorage.setItem(item.id,jsonStr);
-							li.className = 'mui-table-view-cell mui-collapse-content'; 
-							var sendStatus = null; 
-							var sigeButton = null;
-							if (item.status == 1) {
-								sendStatus = "送货中";
-								sigeButton = '<button type="button" class="sengding"' + 'button-send-id="' + item.id + '">' + sendStatus + '</button></div>';
-							} else{
-								sendStatus = "以签收";
-								sigeButton = '<button type="button" class="singed"' + 'button-send-id="' + item.id + '">' + sendStatus + '</button></div>';
-							}
-							var payType = null;
-							if (item.type == 1) {
-								payType = "支付宝￥";
-							} else{ 
-								payType = "微信支付￥"; 
-							}
-							var href = "tel:" + item.tel;
-							var address = "地址: " + item.address;
-							var sender = "(配送人:" + item.sender + ")";
-							if (item.mark == "" || item.mark == null || item.mark == undefined) {
-								var mark = "备注: " + "无";
-							} else{
-								var mark = "备注: " + item.mark;
-							}
-							
-							li.innerHTML = '<div class="line1">'
-				    			+ '<span class="order-time">' + item.time + '</span>'
-				    			+ '<span class="order-pay">' + payType + item.money + '</span>'
-				    			+ sigeButton
-				    			+ '<div class="line2">'
-				    			+ '<p class="about-order">'
-				    			+ '<span class="customer-name"><span class="mui-icon mui-icon-person"></span>' + item.name + '</span>'
-				    			+ '<span class="customer-tel"' + 'data-tel="' + item.tel + '"' + 'data-name="' + item.name + '"><span class="mui-icon mui-icon-phone"></span>' + item.tel + '</span></p>'
-				    			+ '<p class="address"><span class="address-nav"' + 'data-address="' + item.address + '"></span>'
-				    			+ '<span class="order-address"><span class="mui-icon mui-icon-map"></span>' + address + '</span>'
-				    			+ '<span class="order-sender">'+ sender + '</span></p></div>'
-				    			+ '<div class="order-mark">' + mark + '</div>'
-				    			+ '<div class="mui-checkbox line3">'
-							+ '<input class="checkbox" name="checkbox" type="checkbox">'
-							+ '<button class="button-goods" type="button"' + 'data-button-goods-id="' + item.id + '">' + "商品" + '</button>'
-							+ '<button class="button-error" type="button"' + 'data-button-error-id="' + item.id + '">' + "报错" + '</button></div>';
-							table.appendChild(li, table.firstChild);
-						});
+						mui.toast(REFRESH_SUCCESS);
+						// 设置登录状态  退出登录时设置为 false
+						localStorage.setItem(IS_LOGIN,"true");
+						// 存储登录用户信息
+						localStorage.setItem(USER,JSON.stringify(data.user));
+						// 存储员工列表
+						localStorage.setItem(EMPLOYEES,JSON.stringify(data.employees));
+						// 存储订单列表
+						localStorage.setItem(ORDERS,JSON.stringify(data.orders));
+						analyData(data.orders);
+						   
+						
+						;
+					}else{ 
+						mui.toast(REFRESH_FAILE + data.status);
 					}
 				},
 				error: function(xhr, type, errerThrown){
 					mui.toast(NET_ERROR);
+					plus.nativeUI.closeWaiting();
 				}
 			});
 		};
+		// 数据解析
+		function analyData(orData){
+			table.innerHTML = "";
+			mui.each(orData, function(index, item) {
+				var li = document.createElement('li');
+				li.orderId = item.id; /*订单id*/
+				var time = item.ship_time.split("T")[0];
+				li.className = 'mui-table-view-cell mui-collapse-content'; 
+				var sendStatus = null; 
+				var sigeButton = null;
+				switch (item.status) {
+					case 'waitpay':
+						sendStatus = "未付款";
+						break;
+					case 'waitack':
+						sendStatus = "待确认";
+						break;
+					case 'card':
+						sendStatus = "队列中";
+						break;
+					case 'queue':
+						sendStatus = "队列中";
+						break;
+					case 'ship':
+						sendStatus = "送货中";
+						break;
+					case 'finish':
+						sendStatus = "已完成";
+						break;
+					case 'cancel':
+						sendStatus = "已取消";
+						break;
+					case 'paid_card':
+						sendStatus = "已刷卡";
+						break;
+					case 'error':
+						sendStatus = "报错单";
+						break;
+				}
+				sigeButton = '<button type="button" class="sengding"' + 'button-send-id="' + item.id + '">' + sendStatus + '</button></div>';
+				var payType = null;
+				switch (item.pay_type) {
+					case 'cash':
+						payType = "货到付款";
+						break;
+					case 'inshop':
+						payType = "店内现金";
+						break;
+					case 'card':
+						payType = "店内刷卡";
+						break;
+					case 'alipay':
+						payType = "支付宝";
+						break;
+					case 'credit':
+						payType = "余额支付";
+						break;
+					case 'wechat':
+						payType = "微信支付";
+						break;
+					case 'pos':
+						payType = "POS机刷卡";
+						break;
+					case 'receive':
+						payType = "到店自提";
+						break;
+				}
+				var href = "tel:" + item.phone;
+				var address = "地址: " + item.address;
+				var sender = "(配送人:" + item.ship_man_id + ")";
+				if (item.remark == "" || item.remark == null || item.remark == undefined) {
+					var mark = "备注: " + "无";
+				} else{
+					var mark = "备注: " + item.remark;
+				}
+				
+				li.innerHTML = '<div class="line1">'
+	    			+ '<span class="order-time">' + time + '</span>'
+	    			+ '<span class="order-pay">' + payType + "￥" + item.price + '</span>'
+	    			+ sigeButton
+	    			+ '<div class="line2">'
+	    			+ '<p class="about-order">'
+	    			+ '<span class="customer-name"><span class="mui-icon mui-icon-person"></span>' + item.receiver + '</span>'
+	    			+ '<span class="customer-tel"' + 'data-tel="' + item.phone + '"' + 'data-name="' + item.receiver + '"><span class="mui-icon mui-icon-phone"></span>' + item.phone + '</span></p>'
+	    			+ '<p class="address"><span class="address-nav"' + 'data-address="' + item.address + '"></span>'
+	    			+ '<span class="order-address"><span class="mui-icon mui-icon-map"></span>' + address + '</span>'
+	    			+ '<span class="order-sender">'+ sender + '</span></p></div>'
+	    			+ '<div class="order-mark">' + mark + '</div>'
+	    			+ '<div class="mui-checkbox line3">'
+				+ '<input class="checkbox" name="checkbox" type="checkbox">'
+				+ '<button class="button-goods" type="button"' + 'data-button-goods-id="' + item.id + '">' + "商品" + '</button>'
+				+ '<button class="button-error" type="button"' + 'data-button-error-id="' + item.id + '">' + "报错" + '</button></div>';
+				table.appendChild(li, table.firstChild);
+			});
+		}
+		
 		// 拨打电话
 		mui('.mui-content').on('tap','.customer-tel',function(){
 			var phoneNumber = this.getAttribute('data-tel');
@@ -267,7 +341,7 @@
 		// 到百度地图
 		mui('.mui-content').on('tap','.address-nav',function(){
 			var address = this.getAttribute('data-address');
-//			console.log("address = " + address);
+			console.log("address = " + address);
 			// http://ask.dcloud.net.cn/question/14404
 			// 调起百度地图 
 			// http://lbsyun.baidu.com/index.php?title=uri/api/android
@@ -310,7 +384,7 @@
 		// 商品按钮
 		mui('.mui-content').on('tap','.button-goods',function(){
 			var id = this.getAttribute('data-button-goods-id');
-//			console.log("订单ID = " + id + localStorage.getItem(id));
+			console.log("订单ID = " + id);
 			
 			var animationType = "slide-in-right";//页面显示动画，默认为”slide-in-right“；
 			var animationTime = 100; //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200

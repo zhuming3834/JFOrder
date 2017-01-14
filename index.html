@@ -10,7 +10,11 @@
 		<link rel="stylesheet" href="css/mui.min.css" /> 
 		<link rel="stylesheet" href="fonts/iconfont.css" />
 	</head>
-
+	<style>
+		p{
+			/*color: rgb();*/
+		}
+	</style>
 	<body>
 		<nav class="mui-bar mui-bar-tab">
 			<a id="defaultTab" class="mui-tab-item mui-active" href="template/home/index.html">
@@ -32,6 +36,7 @@
 		</nav>
 	</body>
 	<script src="js/mui.min.js"></script>
+	<script type="text/javascript" src="js/system.js" ></script>
 	<script type="text/javascript" charset="utf-8">
 			//mui初始化
 		mui.init();
@@ -45,7 +50,7 @@
 		
 		 //创建子页面，首个选项卡页面显示，其它均隐藏；
 		mui.plusReady(function() {
-			launchScreen();
+			isLogin();
 			// 设置状态栏 颜色
 			plus.navigator.setStatusBarBackground("#007dFF");
 			// 设置状态栏 样式
@@ -100,13 +105,12 @@
 				defaultTab.classList.add('mui-active');
 			}
 		});
-			
-		function launchScreen() {
-			//读取本地存储，检查是否为首次启动
-			var showGuide = plus.storage.getItem("lauchFlag");
-			console.log(showGuide);
-			if(showGuide == "true"){ 
-			}else{
+		function isLogin() {
+		//读取本地存储，检查是否登录
+			var showGuide = localStorage.getItem(IS_LOGIN);
+		//			console.log(showGuide);
+		//  没登录就进入登录页面
+			if(showGuide == "false"){ 
 				//显示启动导航
 				mui.openWindow({
 					id:'login',
@@ -120,5 +124,6 @@
 				});
 			}
 		}
+			
 	</script>
 </html>

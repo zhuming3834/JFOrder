@@ -45,6 +45,7 @@
 		</div>
 	</body>
 	<script src="../../js/mui.min.js"></script>
+	<script type="text/javascript" src="../../js/system.js" ></script>
 	<script type="text/javascript"> 
 		mui.init({
 			swipeBack: true, 
@@ -64,24 +65,46 @@
 		var goods = null;
 		mui.plusReady(function(){
 			self = plus.webview.currentWebview();
-			goodsList = localStorage.getItem(self.goodsID);
-			goods = JSON.parse(goodsList);
+			console.log(self.goodsID);
 			showData();
 		})
 		function showData(){
-			mui.each(goods, function(index, item) {
-				var listNum = index + 1;
-				var li = document.createElement('li');
-				if (index%2 == 0) {
-					li.className = 'tableView-cell'; 
-				} else{
-					li.className = 'tableView-cell-active'; 
+			mui.ajax(BASE_URL + ORDER_ITEMS_DEILE,{
+				data: {
+					order_id: self.goodsID,
+					format: 'json'
+				},
+				dataType: DATA_TYPE,
+				type: REQUEST_TYPE,  
+				timeout: TIME_OUT,   
+				beforeSend: function() {
+					plus.nativeUI.showWaiting();
+				},
+				success: function(data){ 
+					plus.nativeUI.closeWaiting();
+					if (data.status == 100) {
+						mui.each(data.items, function(index, item) {
+							var listNum = index + 1;
+							var li = document.createElement('li');
+							if (index%2 == 0) {
+								li.className = 'tableView-cell'; 
+							} else{
+								li.className = 'tableView-cell-active'; 
+							}
+							li.innerHTML = '<span class="list-left list-common-style">' + listNum + '</span>'
+							+ '<span class="list-center list-common-style">' + item.name + '</span>'
+							+ '<span class="list-right list-common-style">' + item.quantity + '</span>'
+							table.appendChild(li, table.firstChild);
+						});
+					}else{
+						mui.toast(data.msg);
+					}
+				},
+				error: function(xhr, type, errerThrown){
+					mui.toast(NET_ERROR);
+					plus.nativeUI.closeWaiting();
 				}
-				li.innerHTML = '<span class="list-left list-common-style">' + listNum + '</span>'
-				+ '<span class="list-center list-common-style">' + item.name + '</span>'
-				+ '<span class="list-right list-common-style">' + item.num + '</span>'
-				table.appendChild(li, table.firstChild);
 			});
-		}
+		};
 	</script>
 </html>

@@ -85,6 +85,7 @@
 		</div>
 	</body>
 	<script src="../../js/mui.min.js"></script>
+	<script type="text/javascript" src="../../js/system.js" ></script>
 	<script type="text/javascript" src="../../js/mui.picker.min.js" ></script>
 	<script type="text/javascript"> 
 		mui.init();
@@ -129,16 +130,16 @@
 		})
 		//退出按钮点击事件
 		document.querySelector('.nav-right').addEventListener('tap', function(event) {
-			plus.storage.setItem("lauchFlag", "false"); 
+			localStorage.setItem(IS_LOGIN, "false"); 
 //			console.log("退出登录")
-			launchScreen(); // 退出登录后进入登录页面
+			isLogin(); // 退出登录后进入登录页面
 		});
-		function launchScreen() {
-			//读取本地存储，检查是否为首次启动
-			var showGuide = plus.storage.getItem("lauchFlag");
-//			console.log(showGuide);
-			if(showGuide == "true"){ 
-			}else{
+		function isLogin() {
+		//读取本地存储，检查是否登录
+			var showGuide = localStorage.getItem(IS_LOGIN);
+		//			console.log(showGuide);
+		//  没登录就进入登录页面
+			if(showGuide == "false"){ 
 				//显示启动导航
 				mui.openWindow({
 					id:'login',

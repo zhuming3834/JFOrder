@@ -1,3 +1,12 @@
+.footer-music{
+	position: fixed;
+	bottom: 100px;
+	left: calc(50% - 165px);
+	width: 330px !important;
+	margin: auto;
+}
+
+
 /*
  * 公共的css文件，每个页面的html文件都需要包含这个css文件
  */

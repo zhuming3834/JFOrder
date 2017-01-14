@@ -416,6 +416,10 @@
 			 deceleration:0.0004, //阻尼系数,系数越小滑动越灵敏
 			 bounce: true //是否启用回弹
 		});
+		mui('body').on('tap','.mui-control-item',function(){
+			var href = this.getAttribute('href');
+			console.log('点击事件 = ' + href);
+		});
 		// 拨打电话
 		mui('.mui-content').on('tap','.customer-tel',function(){
 			var phoneNumber = this.getAttribute('data-tel');
