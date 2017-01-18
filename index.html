@@ -17,7 +17,7 @@
 	</style>
 	<body>
 		<nav class="mui-bar mui-bar-tab">
-			<a id="defaultTab" class="mui-tab-item mui-active" href="template/home/index.html">
+			<a id="defaultTab" class="mui-tab-item mui-active" href="template/home/homelist.html">
 				<span class="mui-icon iconfont icon-gongneng"></span>
 				<span class="mui-tab-label">首页</span>
 			</a>
@@ -26,7 +26,7 @@
 				<span class="mui-tab-label">订单</span>
 			</a>
 			<a class="mui-tab-item" href="template/me/index.html">
-				<span class="mui-icon iconfont icon-wode"></span>
+				<span class="mui-icon iconfont icon-wode"></span> 
 				<span class="mui-tab-label">我的</span>
 			</a>
 			<!--<a class="mui-tab-item" href="template/login/login.html">
@@ -38,9 +38,9 @@
 	<script src="js/mui.min.js"></script>
 	<script type="text/javascript" src="js/system.js" ></script>
 	<script type="text/javascript" charset="utf-8">
-			//mui初始化
+		//mui初始化 
 		mui.init();
-		var subpages = ['template/home/index.html','template/order/index.html','template/me/index.html'];
+		var subpages = ['template/home/homelist.html','template/order/index.html','template/me/index.html'];
 		var subpage_style = {
 			top: '0px',
 			bottom: '51px'
@@ -50,11 +50,14 @@
 		
 		 //创建子页面，首个选项卡页面显示，其它均隐藏；
 		mui.plusReady(function() {
-			isLogin();
-			// 设置状态栏 颜色
-			plus.navigator.setStatusBarBackground("#007dFF");
-			// 设置状态栏 样式
-			plus.navigator.setStatusBarStyle('UIStatusBarStyleDefault');
+//			isLogin();
+			var osName = plus.os.name;
+			if (osName == "iOS") { // iOS端 才设置状态栏颜色
+				// 设置状态栏 颜色
+				plus.navigator.setStatusBarBackground("#007dFF");
+				// 设置状态栏 样式
+				plus.navigator.setStatusBarStyle('UIStatusBarStyleDefault');	
+			}
 			var self = plus.webview.currentWebview();
 			for (var i = 0; i < subpages.length; i++) {
 				var temp = {}; 
@@ -110,7 +113,7 @@
 			var showGuide = localStorage.getItem(IS_LOGIN);
 		//			console.log(showGuide);
 		//  没登录就进入登录页面
-			if(showGuide == "false"){ 
+			if(showGuide == null || showGuide == undefined || showGuide == "false"){ 
 				//显示启动导航
 				mui.openWindow({
 					id:'login',

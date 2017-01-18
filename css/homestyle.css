@@ -3,7 +3,7 @@
  */
 .mui-content{
 	background-color: #d9dcdc;
-	padding-bottom: 44px;
+	padding-bottom: 50px;
 }
 .mui-table-view,.mui-scroll{
 	background-color: transparent;
@@ -51,7 +51,26 @@
 	float: right;
 	color: white;
 	font-weight: 800;
-	background-color: #f7a608;
+	background-color: blue;
+	border: 0px;
+	border-radius: 20px;
+	padding: 7px 12px 5px;
+}
+
+.waitack{ 
+	float: right;
+	color: white;
+	font-weight: 800;
+	background-color: red;
+	border: 0px;
+	border-radius: 20px;
+	padding: 7px 12px 5px;
+}
+.queue{ 
+	float: right;
+	color: white;
+	font-weight: 800;
+	background-color: green;
 	border: 0px;
 	border-radius: 20px;
 	padding: 7px 12px 5px;
@@ -70,8 +89,8 @@
 	color: #007DFF;
 	font-size: 14px;
 	border-bottom: 1px solid #EEEEEE;
-	height: 30px;
-	line-height: 30px;
+	/*height: 30px;
+	line-height: 30px;*/
 }
 .line2{
 	background-color: #f1f9ff;
@@ -122,7 +141,7 @@
 	position: relative;
 	height: 50px;
 }
-.checkbox{
+.checkbox1{
 	position: absolute;
 	left: 8px;
 	margin-top: 5px;
@@ -194,9 +213,9 @@
 }
 
 .bottom-select{
-	height: 44px;
+	height: 50px;
 	background-color: white;
-	line-height: 43px;
+	line-height: 50px;
 	position: fixed;
 	bottom: 0px;
 	z-index: 10;
@@ -208,9 +227,15 @@
 	left: 16px;
 	margin-top: 4px;
 }
+.allText{
+	position: absolute;
+	left: 50px;
+	/*margin-top: 4px;*/
+	top: -2px;
+}
 .print{
 	float: right;
-	height: 44px;
+	height: 50px;
 	border: none;
 	border-radius: 0px;
 	width: 100px;
@@ -285,9 +310,10 @@
 	line-height: 44px;
 	text-align: center;
 }
-.error-checkbox{
+.error-radio{
 	position: absolute;
-	top: 10px;
+	left: calc(50% + 15px);
+	top: 8px !important;
 }
 .error-textarea{
 	margin: 0px 10px;

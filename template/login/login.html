@@ -34,10 +34,25 @@
 	<script src="../../js/mui.min.js"></script>
 	<script type="text/javascript" src="../../js/system.js" ></script>
 	<script type="text/javascript"> 
-		mui.init();
+		mui.init(function(){
+		});
 		var userid = null;   // 用户名
 		var pasword = null; // 密码
 		mui.plusReady(function(){
+			//读取本地存储，检查是否登录
+			var showGuide = localStorage.getItem(IS_LOGIN);
+		//  登录就进入首页
+			if(showGuide == "true"){ 
+				openIndex();
+			}
+			var osName = plus.os.name;
+			if (osName == 'iOS') {
+				// 设置状态栏 颜色
+				plus.navigator.setStatusBarBackground("#007dFF");
+				// 设置状态栏 样式
+				plus.navigator.setStatusBarStyle('UIStatusBarStyleDefault');
+			}
+			plus.navigator.closeSplashscreen();
 			userid = document.getElementById('userid');
 			pasword = document.getElementById('pw');
 		})
@@ -93,15 +108,12 @@
 						// 存储员工列表
 						localStorage.setItem(EMPLOYEES,JSON.stringify(data.employees));
 						// 存储订单列表
-						localStorage.setItem(ORDERS,JSON.stringify(data.orders));
-						var loginPage = plus.webview.getWebviewById('login');
-						mui.fire(loginPage,'login',{
-				            stasus: '100'
-				        })
-						
-						plus.webview.currentWebview().close();  
+						localStorage.setItem(ORDERS,JSON.stringify(data.orders));	
+						setTimeout(function(){
+							openIndex();
+						},1100);
 					}else{
-						mui.toast(LOGIN_FAILE + data.status);
+						mui.toast(data.msg);
 					}
 				},
 				error: function(xhr, type, errerThrown){
@@ -110,5 +122,18 @@
 				}
 			});
 		};
+		function openIndex(){
+			mui.openWindow({
+				id:'index.html',
+				url:'/index.html',
+				show:{
+					aniShow:'none'
+				},
+				waiting:{
+					autoShow:false
+				}
+			});
+		}
+		
 	</script>
 </html>

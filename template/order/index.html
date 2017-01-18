@@ -34,7 +34,7 @@
 		<div class="mui-content mui-scroll-wrapper">
 			<div class="mui-scroll">
 				<div id="item1" class="mui-control-content mui-active">
-					<ul class="mui-table-view">
+					<ul class="mui-table-view tableView1">
 						 <li class="mui-table-view-cell mui-collapse-content">
 					    		<div class="line1">
 					    			<span class="order-time">2016-12-12</span>
@@ -126,7 +126,7 @@
 					</ul>
 				</div>
 				<div id="item2" class="mui-control-content">
-					<ul class="mui-table-view">
+					<ul class="mui-table-view tableView2">
 						<li class="mui-table-view-cell mui-collapse-content">
 					    		<div class="line1">
 					    			<span class="order-time">2016-12-12</span>
@@ -214,7 +214,7 @@
 					</ul>
 				</div>
 				<div id="item3" class="mui-control-content">
-					<ul class="mui-table-view">
+					<ul class="mui-table-view tableView3">
 						<li class="mui-table-view-cell mui-collapse-content">
 					    		<div class="line1">
 					    			<span class="order-time">2016-12-12</span>
@@ -306,7 +306,7 @@
 					</ul>
 				</div>
 				<div id="item4" class="mui-control-content">
-					<ul class="mui-table-view">
+					<ul class="mui-table-view tableView4">
 						<li class="mui-table-view-cell mui-collapse-content">
 					    		<div class="line1">
 					    			<span class="order-time">2016-12-12</span>
@@ -401,11 +401,18 @@
 		</div>
 	</body>
 	<script src="../../js/mui.min.js"></script>
+	<script type="text/javascript" src="../../js/system.js" ></script>
 	<script>
-		var table = null;
+		var table1 = null; // 订单管理
+		var table2 = null; // 已完成订单
+		var table3 = null; // 已报错
+		var table4 = null; // 明日订单
 		mui.plusReady(function(){
-			table = document.body.querySelector('.mui-table-view');
-//			getData();
+			table1 = document.body.querySelector('.tableView1');
+			table2 = document.body.querySelector('.tableView2');
+			table3 = document.body.querySelector('.tableView3');
+			table4 = document.body.querySelector('.tableView4');
+			getData();
 		})
 		mui('.mui-scroll-wrapper').scroll({
 			 scrollY: true, //是否竖向滚动
@@ -416,9 +423,447 @@
 			 deceleration:0.0004, //阻尼系数,系数越小滑动越灵敏
 			 bounce: true //是否启用回弹
 		});
+		// 获取数据
+		function getData(){
+			mui.ajax(BASE_URL + ORDER_TYPE,{
+				data: {
+					username: localStorage.getItem(USER_NAME),
+					format: 'json'
+				},
+				dataType: DATA_TYPE,
+				type: REQUEST_TYPE,  
+				timeout: TIME_OUT,   
+				beforeSend: function(data) {
+					plus.nativeUI.showWaiting();
+				},
+				success: function(data){ 
+					plus.nativeUI.closeWaiting();
+					if (data.status == 100) {
+//						mui.toast(REFRESH_SUCCESS);
+						allOrders(data.all_orders);
+						doneOrders(data.done_orders);
+						errorOrders(data.error_orders);
+						tomorrowOrders(data.tomorrow_orders);
+					}else{ 
+						mui.toast(REFRESH_FAILE + data.status);
+					}
+				},
+				error: function(xhr, type, errerThrown){
+					mui.toast(NET_ERROR);
+					plus.nativeUI.closeWaiting();
+				}
+			});
+		};
+		
+		
+		// 订单管理
+		function allOrders(data1){
+			table1.innerHTML = "";
+			mui.each(data1, function(index, item) {
+				var li = document.createElement('li');
+				li.orderId = item.id; /*订单id*/
+				var time = item.ship_time.split("T")[0];
+				li.className = 'mui-table-view-cell mui-collapse-content'; 
+				var sendStatus = null; 
+				var sigeButton = null;
+				switch (item.status) {
+					case 'waitpay':
+						sendStatus = "未付款";
+						sigeButton = '<span class="finish">' + sendStatus + '</span></div>';
+						break;
+					case 'waitack':
+						sendStatus = "待确认";
+						sigeButton = '<button type="button" class="waitack"' + 'button-send-id="' + item.id + '">' + sendStatus + '</button></div>';
+						break;
+					case 'queue':
+						sendStatus = "队列中";
+						sigeButton = '<button type="button" class="queue"' + 'button-send-id="' + item.id + '">' + sendStatus + '</button></div>';
+						break;
+					case 'ship':
+						sendStatus = "送货中";
+						sigeButton = '<button type="button" class="sengding"' + 'button-send-id="' + item.id + '">' + sendStatus + '</button></div>';
+						break;
+					case 'finish':
+						sendStatus = "已完成";
+						sigeButton = '<span class="finish">' + sendStatus + '</span></div>';
+						break;
+					case 'cancel':
+						sendStatus = "已取消";
+						sigeButton = '<span class="finish">' + sendStatus + '</span></div>';
+						break;
+					case 'paid_card':
+						sendStatus = "已刷卡";
+						sigeButton = '<span class="finish">' + sendStatus + '</span></div>';
+						break;
+					case 'error':
+						sendStatus = "报错单";
+						sigeButton = '<span class="error">' + sendStatus + '</span></div>';
+						break;
+				}
+				var payType = null;
+				switch (item.pay_type) {
+					case 'cash':
+						payType = "货到付款";
+						break;
+					case 'inshop':
+						payType = "店内现金";
+						break;
+					case 'card':
+						payType = "店内刷卡";
+						break;
+					case 'alipay':
+						payType = "支付宝";
+						break;
+					case 'credit':
+						payType = "余额支付";
+						break;
+					case 'wechat':
+						payType = "微信支付";
+						break;
+					case 'pos':
+						payType = "POS机刷卡";
+						break;
+					case 'receive':
+						payType = "到店自提";
+						break;
+				}
+				var href = "tel:" + item.phone;
+				var address = "地址: " + item.address;
+				if (item.ship_man_id == null || item.ship_man_id == undefined || item.ship_man_id == "null" || item.ship_man_id == "") {
+					var sender = "(配送人:无)";
+				} else{
+					if (item.ship_man_id == null || item.ship_man_id == undefined || item.ship_man_id == "null" || item.ship_man_id == "") {
+					var sender = "(配送人:无)";
+				} else{
+					var sender = "(配送人:" + item.ship_man_id + ")";
+				}
+				}
+				if (item.remark == "" || item.remark == null || item.remark == undefined) {
+					var mark = "备注: " + "无";
+				} else{
+					var mark = "备注: " + item.remark;
+				}
+				
+				li.innerHTML =  '<div class="line1">'
+				+ '<span class="order-time">' + time + '</span>'
+				+ '<span class="order-pay">'  + payType + "￥" + item.price + '</span>'
+				+ sigeButton
+				+ '<div class="line2">'
+				+ '<p class="about-order">'
+				+ '<span class="customer-name"><span class="mui-icon mui-icon-person"></span>' + item.receiver + '</span>'
+				+ '<span class="customer-tel"' + 'data-tel="' + item.phone + '"' + 'data-name="' + item.receiver + '"><span class="mui-icon mui-icon-phone"></span>' + item.phone + '</span></p>'
+				+ '<p class="address"><span class="address-nav"' + 'data-address="' + item.address + '"></span>'
+	    			+ '<span class="order-address"><span class="mui-icon mui-icon-map"></span>' + address + '</span>'
+	    			+ '<span class="order-sender">'+ sender + '</span></p></div>'
+	    			+ '<div class="order-mark">' + mark + '</div>'
+	    			+ '<div class="mui-checkbox line3">'
+				+ '<button class="button-goods" type="button"' + 'data-button-goods-id="' + item.id + '">' + "商品" + '</button>'
+				+ '<button class="button-fendan" type="button"' + 'data-button-error-id="' + item.id + '">' + "分单" + '</button></div>';
+				table1.appendChild(li, table1.firstChild);
+			});
+		}
+		// 已完成
+		function doneOrders(data2){
+			table2.innerHTML = "";
+			mui.each(data2, function(index, item) {
+				var li = document.createElement('li');
+				li.orderId = item.id; /*订单id*/
+				var time = item.ship_time.split("T")[0];
+				li.className = 'mui-table-view-cell mui-collapse-content'; 
+				var sendStatus = null; 
+				var sigeButton = null;
+				switch (item.status) {
+					case 'waitpay':
+						sendStatus = "未付款";
+						break;
+					case 'waitack':
+						sendStatus = "待确认";
+						break;
+					case 'queue':
+						sendStatus = "队列中";
+						break;
+					case 'ship':
+						sendStatus = "送货中";
+						break;
+					case 'finish':
+						sendStatus = "已完成";
+						break;
+					case 'cancel':
+						sendStatus = "已取消";
+						break;
+					case 'paid_card':
+						sendStatus = "已刷卡";
+						break;
+					case 'error':
+						sendStatus = "报错单";
+						break;
+				}
+				sigeButton = '<span class="finish">' + sendStatus + '</span></div>';
+				var payType = null;
+				switch (item.pay_type) {
+					case 'cash':
+						payType = "货到付款";
+						break;
+					case 'inshop':
+						payType = "店内现金";
+						break;
+					case 'card':
+						payType = "店内刷卡";
+						break;
+					case 'alipay':
+						payType = "支付宝";
+						break;
+					case 'credit':
+						payType = "余额支付";
+						break;
+					case 'wechat':
+						payType = "微信支付";
+						break;
+					case 'pos':
+						payType = "POS机刷卡";
+						break;
+					case 'receive':
+						payType = "到店自提";
+						break;
+				}
+				var href = "tel:" + item.phone;
+				var address = "地址: " + item.address;
+				if (item.ship_man_id == null || item.ship_man_id == undefined || item.ship_man_id == "null" || item.ship_man_id == "") {
+					var sender = "(配送人:无)";
+				} else{
+					var sender = "(配送人:" + item.ship_man_id + ")";
+				}
+				if (item.remark == "" || item.remark == null || item.remark == undefined) {
+					var mark = "备注: " + "无";
+				} else{
+					var mark = "备注: " + item.remark;
+				}
+				
+				li.innerHTML =  '<div class="line1">'
+				+ '<span class="order-time">' + time + '</span>'
+				+ '<span class="order-pay">'  + payType + "￥" + item.price + '</span>'
+				+ sigeButton
+				+ '<div class="line2">'
+				+ '<p class="about-order">'
+				+ '<span class="customer-name"><span class="mui-icon mui-icon-person"></span>' + item.receiver + '</span>'
+				+ '<span class="customer-tel"' + 'data-tel="' + item.phone + '"' + 'data-name="' + item.receiver + '"><span class="mui-icon mui-icon-phone"></span>' + item.phone + '</span></p>'
+				+ '<p class="address"><span class="address-nav"' + 'data-address="' + item.address + '"></span>'
+	    			+ '<span class="order-address"><span class="mui-icon mui-icon-map"></span>' + address + '</span>'
+	    			+ '<span class="order-sender">'+ sender + '</span></p></div>'
+	    			+ '<div class="order-mark">' + mark + '</div>'
+	    			+ '<div class="mui-checkbox line3">'
+				+ '<button class="button-goods" type="button"' + 'data-button-goods-id="' + item.id + '">' + "商品" + '</button></div>';
+				table2.appendChild(li, table2.firstChild);
+			});
+		}
+		// 已报错
+		function errorOrders(data3){
+			table3.innerHTML = "";
+			mui.each(data3, function(index, item) {
+				var li = document.createElement('li');
+				li.orderId = item.id; /*订单id*/
+				var time = item.ship_time.split("T")[0];
+				li.className = 'mui-table-view-cell mui-collapse-content'; 
+				var sendStatus = null; 
+				var sigeButton = null;
+				switch (item.status) {
+					case 'waitpay':
+						sendStatus = "未付款";
+						break;
+					case 'waitack':
+						sendStatus = "待确认";
+						break;
+					case 'queue':
+						sendStatus = "队列中";
+						break;
+					case 'ship':
+						sendStatus = "送货中";
+						break;
+					case 'finish':
+						sendStatus = "已完成";
+						break;
+					case 'cancel':
+						sendStatus = "已取消";
+						break;
+					case 'paid_card':
+						sendStatus = "已刷卡";
+						break;
+					case 'error':
+						sendStatus = "报错单";
+						break;
+				}
+				sigeButton = '<span class="error">' + sendStatus + '</span></div>';
+				var payType = null;
+				switch (item.pay_type) {
+					case 'cash':
+						payType = "货到付款";
+						break;
+					case 'inshop':
+						payType = "店内现金";
+						break;
+					case 'card':
+						payType = "店内刷卡";
+						break;
+					case 'alipay':
+						payType = "支付宝";
+						break;
+					case 'credit':
+						payType = "余额支付";
+						break;
+					case 'wechat':
+						payType = "微信支付";
+						break;
+					case 'pos':
+						payType = "POS机刷卡";
+						break;
+					case 'receive':
+						payType = "到店自提";
+						break;
+				}
+				var href = "tel:" + item.phone;
+				var address = "地址: " + item.address;
+				if (item.ship_man_id == null || item.ship_man_id == undefined || item.ship_man_id == "null" || item.ship_man_id == "") {
+					var sender = "(配送人:无)";
+				} else{
+					var sender = "(配送人:" + item.ship_man_id + ")";
+				}
+				if (item.remark == "" || item.remark == null || item.remark == undefined) {
+					var mark = "备注: " + "无";
+				} else{
+					var mark = "备注: " + item.remark;
+				}
+				// 报错
+				if (item.error == "" || item.error == null || item.error == undefined) {
+					var error = "报错: " + "无";
+				} else{
+					var error = "报错: " + item.error;
+				}
+				
+				li.innerHTML =  '<div class="line1">'
+				+ '<span class="order-time">' + time + '</span>'
+				+ '<span class="order-pay">'  + payType + "￥" + item.price + '</span>'
+				+ sigeButton
+				+ '<div class="line2">'
+				+ '<p class="about-order">'
+				+ '<span class="customer-name"><span class="mui-icon mui-icon-person"></span>' + item.receiver + '</span>'
+				+ '<span class="customer-tel"' + 'data-tel="' + item.phone + '"' + 'data-name="' + item.receiver + '"><span class="mui-icon mui-icon-phone"></span>' + item.phone + '</span></p>'
+				+ '<p class="address"><span class="address-nav"' + 'data-address="' + item.address + '"></span>'
+	    			+ '<span class="order-address"><span class="mui-icon mui-icon-map"></span>' + address + '</span>'
+	    			+ '<span class="order-sender">'+ sender + '</span></p></div>'
+	    			+ '<div class="order-emark">' + error + '</div>'
+	    			+ '<div class="order-emark">' + mark + '</div>'
+	    			+ '<div class="mui-checkbox line3">'
+				+ '<button class="button-goods" type="button"' + 'data-button-goods-id="' + item.id + '">' + "商品" + '</button></div>';
+				table3.appendChild(li, table3.firstChild);
+			});
+		}
+		// 明日订单
+		function tomorrowOrders(data4){
+			table4.innerHTML = "";
+			mui.each(data4, function(index, item) {
+				var li = document.createElement('li');
+				li.orderId = item.id; /*订单id*/
+				var time = item.ship_time.split("T")[0];
+				li.className = 'mui-table-view-cell mui-collapse-content'; 
+				var sendStatus = null; 
+				var sigeButton = null;
+				switch (item.status) {
+					case 'waitpay':
+						sendStatus = "未付款";
+						sigeButton = '<span class="finish">' + sendStatus + '</span></div>';
+						break;
+					case 'waitack':
+						sendStatus = "待确认";
+						sigeButton = '<button type="button" class="waitack"' + 'button-send-id="' + item.id + '">' + sendStatus + '</button></div>';
+						break;
+					case 'queue':
+						sendStatus = "队列中";
+						sigeButton = '<button type="button" class="queue"' + 'button-send-id="' + item.id + '">' + sendStatus + '</button></div>';
+						break;
+					case 'ship':
+						sendStatus = "送货中";
+						sigeButton = '<button type="button" class="sengding"' + 'button-send-id="' + item.id + '">' + sendStatus + '</button></div>';
+						break;
+					case 'finish':
+						sendStatus = "已完成";
+						sigeButton = '<span class="finish">' + sendStatus + '</span></div>';
+						break;
+					case 'cancel':
+						sendStatus = "已取消";
+						sigeButton = '<span class="finish">' + sendStatus + '</span></div>';
+						break;
+					case 'paid_card':
+						sendStatus = "已刷卡";
+						sigeButton = '<span class="finish">' + sendStatus + '</span></div>';
+						break;
+					case 'error':
+						sendStatus = "报错单";
+						sigeButton = '<span class="error">' + sendStatus + '</span></div>';
+						break;
+				}
+				var payType = null;
+				switch (item.pay_type) {
+					case 'cash':
+						payType = "货到付款";
+						break;
+					case 'inshop':
+						payType = "店内现金";
+						break;
+					case 'card':
+						payType = "店内刷卡";
+						break;
+					case 'alipay':
+						payType = "支付宝";
+						break;
+					case 'credit':
+						payType = "余额支付";
+						break;
+					case 'wechat':
+						payType = "微信支付";
+						break;
+					case 'pos':
+						payType = "POS机刷卡";
+						break;
+					case 'receive':
+						payType = "到店自提";
+						break;
+				}
+				var href = "tel:" + item.phone;
+				var address = "地址: " + item.address;
+				if (item.ship_man_id == null || item.ship_man_id == undefined || item.ship_man_id == "null" || item.ship_man_id == "") {
+					var sender = "(配送人:无)";
+				} else{
+					var sender = "(配送人:" + item.ship_man_id + ")";
+				}
+				if (item.remark == "" || item.remark == null || item.remark == undefined) {
+					var mark = "备注: " + "无";
+				} else{
+					var mark = "备注: " + item.remark;
+				}
+				
+				li.innerHTML =  '<div class="line1">'
+				+ '<span class="order-time">' + time + '</span>'
+				+ '<span class="order-pay">'  + payType + "￥" + item.price + '</span>'
+				+ sigeButton
+				+ '<div class="line2">'
+				+ '<p class="about-order">'
+				+ '<span class="customer-name"><span class="mui-icon mui-icon-person"></span>' + item.receiver + '</span>'
+				+ '<span class="customer-tel"' + 'data-tel="' + item.phone + '"' + 'data-name="' + item.receiver + '"><span class="mui-icon mui-icon-phone"></span>' + item.phone + '</span></p>'
+				+ '<p class="address"><span class="address-nav"' + 'data-address="' + item.address + '"></span>'
+	    			+ '<span class="order-address"><span class="mui-icon mui-icon-map"></span>' + address + '</span>'
+	    			+ '<span class="order-sender">'+ sender + '</span></p></div>'
+	    			+ '<div class="order-mark">' + mark + '</div>'
+	    			+ '<div class="mui-checkbox line3">'
+				+ '<button class="button-goods" type="button"' + 'data-button-goods-id="' + item.id + '">' + "商品" + '</button>'
+				+ '<button class="button-fendan" type="button"' + 'data-button-error-id="' + item.id + '">' + "分单" + '</button></div>';
+				table4.appendChild(li, table4.firstChild);
+			});
+		}
+		// 导航栏订单状态点击事件
 		mui('body').on('tap','.mui-control-item',function(){
+			mui('.mui-scroll-wrapper').scroll().scrollTo(0,0,100);//100毫秒滚动到顶
 			var href = this.getAttribute('href');
-			console.log('点击事件 = ' + href);
+			getData();
 		});
 		// 拨打电话
 		mui('.mui-content').on('tap','.customer-tel',function(){
@@ -435,12 +880,46 @@
 		}) 
 		// 送货按钮
 		mui('.mui-content').on('tap','.sengding',function(){
-			var parent = this.getAttribute('button-send-id');
-//			console.log("id = " + parent);
-			
+			var orderID = this.getAttribute('button-send-id');
+			var btn = ["取消","确定"];
+			mui.confirm("确定需要修改订单状态吗?","",btn,function(e){
+				if(e.index == 1){
+					changeStatus(orderID);
+				}
+			});
+		})
+		// 送货按钮
+		mui('.mui-content').on('tap','.waitack',function(){
+			var orderID = this.getAttribute('button-send-id');
+			var btn = ["取消","确定"];
+			mui.confirm("确定需要修改订单状态吗?","",btn,function(e){
+				if(e.index == 1){
+					changeStatus(orderID);
+				}
+			});
+		})
+		// 送货按钮
+		mui('.mui-content').on('tap','.queue',function(){
+			var orderID = this.getAttribute('button-send-id');
+			var btn = ["取消","确定"];
+			mui.confirm("确定需要修改订单状态吗?","",btn,function(e){
+				if(e.index == 1){
+					changeStatus(orderID);
+				}
+			});
+		})
+		// 待确认
+		mui('.mui-content').on('tap','.tomorrow',function(){
+			var orderID = this.getAttribute('button-send-id');
+			var btn = ["取消","确定"];
+			mui.confirm("确定需要修改订单状态吗?",btn,function(e){
+				if(e.index == 1){
+					changeStatus(orderID);
+				}
+			});
 		}) 
 		// 分单按钮
-		mui('.mui-content').on('tap','.button-error',function(){
+		mui('.mui-content').on('tap','.button-fendan',function(){
 			var id = this.getAttribute('data-button-error-id');
 //			console.log("id = " + id);
 			var animationType = "slide-in-right";//页面显示动画，默认为”slide-in-right“；
@@ -455,6 +934,9 @@
 				}, 
 				extras:{
 					listID: id
+				},
+				waiting:{
+					autoShow:false
 				}
 			})
 		}) 
@@ -475,9 +957,46 @@
 				}, 
 				extras:{
 					goodsID: id
+				},
+				waiting:{
+					autoShow:false
 				}
 			})
 		}) 
+		
+		// 改变订单状态
+		function changeStatus(orID){
+			mui.ajax(BASE_URL + CHANGE_ORDER_STATUS,{
+				data: {
+					order_id: orID,
+					format: 'json'
+				},
+				dataType: DATA_TYPE,
+				type: REQUEST_TYPE,  
+				timeout: TIME_OUT,   
+				beforeSend: function(data) {
+					plus.nativeUI.showWaiting();
+				},
+				success: function(data){ 
+					plus.nativeUI.closeWaiting();
+					if (data.status == 100) {
+						mui.toast(data.msg);
+						setTimeout(function(){
+					        getData();
+					    },1200);
+					}else{ 
+						mui.toast(data.status + data.msg);
+					}
+				},
+				error: function(xhr, type, errerThrown){
+					mui.toast(NET_ERROR);
+					plus.nativeUI.closeWaiting();
+				}
+			});
+		};
+		
+		
+		
 	</script>
 
 </html>

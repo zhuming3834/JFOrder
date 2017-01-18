@@ -11,17 +11,18 @@
 		<link rel="stylesheet" href="../../css/mui.picker.min.css" />
 		<link rel="stylesheet" href="../../css/app.css" />
 		<link rel="stylesheet" href="../../css/mestyle.css" />
+		<link rel="stylesheet" href="../../fonts/iconfont.css" />
 	</head>
 
 	<body>
 		<header class="mui-bar mui-bar-nav jfbar">
 			<h1 class="mui-title nav-title">结算</h1>   
-			<a class="nav-right">退出</a>
+			<a class="nav-right">确定</a>
 		</header>
 		<div class="mui-content mui-scroll-wrapper">
 			<div class="mui-scroll">
 				<div class="area1">
-					<span class="date"><span class="mui-icon mui-icon-camera"></span>日期</span>
+					<span class="date"><span class="mui-icon iconfont icon-rili"></span>&nbsp;日期</span>
 					<!--<span class="mui-right">请选择日期<span class="mui-icon mui-icon-arrowright"></span></span>-->
 					<button class="start-date">请选择开始日期</button>
 					<button class="end-date">请选择结束日期</button>
@@ -29,17 +30,17 @@
 				<div class="area2">
 					<div class="area2-item">
 						<span class="area2-item-left"><span class="mui-icon mui-icon-location-filled"></span>区域</span>
-						<span class="area2-item-right">洪山区</span></span>
+						<span class="area2-item-right" id="map"></span></span>
 						<div class="line"></div>
 					</div>  
 					<div class="area2-item">
 						<span class="area2-item-left"><span class="mui-icon mui-icon-person-filled"></span>姓名</span>
-						<span class="area2-item-right">彭于晏</span></span>
+						<span class="area2-item-right" id="name"></span></span>
 						<div class="line"></div>
 					</div>  
 					<div class="area2-item">
 						<span class="area2-item-left"><span class="mui-icon mui-icon-phone-filled"></span>电话</span>
-						<span class="area2-item-right">13296664426</span></span>
+						<span class="area2-item-right" id="tel"></span></span>
 						<!--<div class="line"></div>-->
 					</div>  
 				</div>  
@@ -52,35 +53,36 @@
 					<ul class="mui-table-view">  
 						<li class="mui-table-view-cell mui-collapse-content"> 
 							<span class="area3-item">货到付款</span>
-							<span class="area3-item">33</span>
-							<span class="area3-item">￥5300</span>  
+							<span class="area3-item" id="huo1"></span>
+							<span class="area3-item" id="huo2"></span>  
 						</li>
 						<li class="mui-table-view-cell mui-collapse-content line-active"> 
 							<span class="area3-item">微信支付</span>
-							<span class="area3-item">33</span>
-							<span class="area3-item">￥5300</span>  
+							<span class="area3-item" id="wx1"></span>
+							<span class="area3-item" id="wx2"></span>  
 						</li>
 						<li class="mui-table-view-cell mui-collapse-content"> 
 							<span class="area3-item">支付宝</span>
-							<span class="area3-item">33</span>
-							<span class="area3-item">￥5300</span>  
+							<span class="area3-item" id="ali1"></span>
+							<span class="area3-item" id="ali2"></span>  
 						</li>
 						<li class="mui-table-view-cell mui-collapse-content line-active"> 
 							<span class="area3-item">余额支付</span>
-							<span class="area3-item">33</span>
-							<span class="area3-item">￥5300</span>  
+							<span class="area3-item" id="yue1"></span>
+							<span class="area3-item" id="yue2"></span>  
 						</li>
 						<li class="mui-table-view-cell mui-collapse-content"> 
 							<span class="area3-item">合计</span>
-							<span class="area3-item">133</span>
-							<span class="area3-item">￥4300</span>  
+							<span class="area3-item" id="heji1"></span>
+							<span class="area3-item" id="heji2"></span>  
 						</li>
 					</ul>
 				</div>
 				<div class="area4">
 					 <div class="icon-money">我的提成</div>
-					 <div class="money">￥3200.6</div> 
+					 <div class="money" id="allmoney"></div> 
 				</div> 
+				<button class="loginOut" type="button">退出</button>
 			</div>
 		</div>
 	</body>
@@ -98,10 +100,63 @@
 			 deceleration:0.0004, //阻尼系数,系数越小滑动越灵敏
 			 bounce: true //是否启用回弹
 		});
-		var startDate = null;
-		var endDate = null;
-		document.querySelector('.start-date').addEventListener('tap',function(){
+		var startDate = null; // 开始时间
+		var endDate = null; // 结束时间
+		var huo1 = null; // 货到付款的数量
+		var huo2 = null; // 货到付款的金额
+		var wx1 = null; // 微信的数量
+		var wx2 = null; // 微信的金额
+		var ali1 = null; // 支付宝的数量
+		var ali2 = null; // 支付宝的金额
+		var yue1 = null; // 余额的数量
+		var yue2 = null; // 余额的金额
+		var heji1 = null; // 合计的数量
+		var heji2 = null; // 合计的金额
+		
+		var allmoney = null; // 我的提成
+		
+		var mapText = null;
+		var nameText = null;
+		var telText = null;
+	
+		mui.plusReady(function(){
 			startDate = document.querySelector('.start-date');
+			endDate = document.querySelector('.end-date');
+			
+			mapText = document.getElementById('map');
+			nameText = document.getElementById('name');
+			telText = document.getElementById('tel');
+			
+			showData(1);
+			
+			huo1 = document.getElementById('huo1');
+			huo2 = document.getElementById('huo2');
+			wx1 = document.getElementById('wx1');
+			wx2 = document.getElementById('wx2');
+			ali1 = document.getElementById('ali1');
+			ali2 = document.getElementById('ali2');
+			yue1 = document.getElementById('yue1');
+			yue2 = document.getElementById('yue2');
+			heji1 = document.getElementById('heji1');
+			heji2 = document.getElementById('heji2');
+			
+			allmoney = document.getElementById('allmoney');
+		})
+		function showData(flag){
+			if (flag == 1) {
+				var user = JSON.parse(localStorage.getItem(USER));
+				mapText.innerText = user.zone;
+				nameText.innerText = user.username;
+				telText.innerText = user.tel_phone;	
+			}else{
+				mapText.innerText = "";
+				nameText.innerText = "";
+				telText.innerText = "";		
+			}
+		}
+		
+		
+		document.querySelector('.start-date').addEventListener('tap',function(){
 			var startpicker = new mui.DtPicker({
 			    type: "date",//设置日历初始视图模式 
 			    beginDate: new Date(1970, 01, 01),//设置开始日期 
@@ -115,7 +170,6 @@
 			}) 
 		})
 		document.querySelector('.end-date').addEventListener('tap',function(){
-			endDate = document.querySelector('.end-date');
 			var endpicker = new mui.DtPicker({
 			    type: "date",//设置日历初始视图模式 
 			    beginDate: new Date(1970, 01, 01),//设置开始日期 
@@ -129,29 +183,92 @@
 			}) 
 		})
 		//退出按钮点击事件
-		document.querySelector('.nav-right').addEventListener('tap', function(event) {
-			localStorage.setItem(IS_LOGIN, "false"); 
-//			console.log("退出登录")
-			isLogin(); // 退出登录后进入登录页面
+		document.querySelector('.loginOut').addEventListener('tap', function(event) {
+			var btn = ["取消","确定"]; 
+			mui.confirm("确定退出登录!","",btn,function(e){
+				if(e.index == 1){
+					localStorage.setItem(IS_LOGIN, "false"); 
+					localStorage.removeItem(USER);
+					localStorage.removeItem(USER_NAME);
+					localStorage.removeItem(PASS_WORD);
+					isLogin(); // 退出登录后进入登录页面
+				}
+			});
 		});
 		function isLogin() {
-		//读取本地存储，检查是否登录
-			var showGuide = localStorage.getItem(IS_LOGIN);
-		//			console.log(showGuide);
-		//  没登录就进入登录页面
-			if(showGuide == "false"){ 
-				//显示启动导航
-				mui.openWindow({
-					id:'login',
-					url:'../login/login.html',
-					show:{
-						aniShow:'none'
-					},
-					waiting:{
-						autoShow:false
-					}
-				});
-			}
+			showData();
+			goHome();
+			//显示启动导航
+			mui.openWindow({
+				id:'login',
+				url:'../login/login.html',
+				show:{
+					aniShow:'none'
+				},
+				waiting:{
+					autoShow:false
+				}
+			});
 		}
+		
+		document.querySelector('.nav-right').addEventListener('tap',function(){
+			console.log(startDate.innerText);
+			console.log(endDate.innerText);
+			if (startDate.innerText == null || startDate.innerText == undefined || startDate.innerText.length == 0 || startDate.innerText == '请选择开始日期') {
+				alert("请选择开始日期");
+				return;
+			}
+			if (endDate.innerText == null || endDate.innerText == undefined || endDate.innerText.length == 0 || endDate.innerText == '请选择结束日期') {
+				alert("请选择结束日期");
+				return;
+			}
+			console.log('确定');
+			mui.ajax(BASE_URL + PAYMENT_STATUS,{
+				data: {
+					begin_date: startDate.innerText,
+					end_date: endDate.innerText,
+					user_name: localStorage.getItem(USER_NAME),
+					format: 'json' 
+				},
+				dataType: DATA_TYPE,
+				type: REQUEST_TYPE,  
+				timeout: TIME_OUT,   
+				beforeSend: function(data) {
+					plus.nativeUI.showWaiting();
+				},
+				success: function(data){ 
+					plus.nativeUI.closeWaiting();
+					if (data.status == 100) {
+						mui.toast(data.msg);
+						// 货到付款
+						huo1.innerText = data.resp.cash.count;
+						huo2.innerText = '￥' + data.resp.cash.sum;
+						// 微信支付
+						wx1.innerText = data.resp.wechat.count;
+						wx2.innerText = '￥' + data.resp.wechat.sum;
+						// 支付宝
+						ali1.innerText = data.resp.alipay.count;
+						ali2.innerText = '￥' + data.resp.alipay.sum;
+						// 余额支付
+						yue1.innerText = data.resp.credit.count;
+						yue2.innerText = '￥' + data.resp.credit.sum;
+						// 合计
+						heji1.innerText = data.resp.order_count.count;
+						heji2.innerText = '￥' + data.resp.order_count.money_sum;
+						
+						// 提成
+						allmoney.innerText = '￥' + data.resp.pay_salary.pay_salary;
+					}else{ 
+						mui.toast(data.status + data.msg);
+					}
+				},
+				error: function(xhr, type, errerThrown){
+					mui.toast(NET_ERROR);
+					plus.nativeUI.closeWaiting();
+				}
+			});
+		})
+		
+		
 	</script>
 </html>

@@ -25,7 +25,7 @@
 					<span class="list-right list-common-style">区域</span>
 				</div>
 				<ul class="tableView"> 
-					<li class="tableView-cell mui-input-row mui-radio mui-left">
+					<!--<li class="tableView-cell mui-input-row mui-radio mui-left">
 						<span class="list-common-style">耿旭东</span>
 						<span class="list-common-style">洪山区</span>
 						<input name="radio1" type="radio" checked="checked">
@@ -99,12 +99,13 @@
 						<span class="list-common-style">耿旭东</span>
 						<span class="list-common-style">洪山区</span>
 						<input name="radio1" type="radio">
-					</li>
+					</li>-->
 				</ul>
 			</div>
 		</div>
 	</body>
 	<script src="../../js/mui.min.js"></script>
+	<script type="text/javascript" src="../../js/system.js" ></script>
 	<script type="text/javascript"> 
 		mui.init({
 			swipeBack: true, 
@@ -118,9 +119,88 @@
 			 deceleration:0.0004, //阻尼系数,系数越小滑动越灵敏
 			 bounce: true //是否启用回弹
 		});
+		var table = null;
+		var self = null;
+		// 选中的送货人的ID
+		var employeeId = null;
+		mui.plusReady(function(){
+			table = document.querySelector('.tableView');
+			self = plus.webview.currentWebview();
+			showList();
+		})
+		
+		function showList(){
+			var employees = JSON.parse(localStorage.getItem(EMPLOYEES));
+			table.innerHTML = '';
+			mui.each(employees,function(index, item){
+				var li = document.createElement('li');
+				var area = null;
+				if (item.building == null || item.building == undefined || item.building == "null") {
+					area = "";
+				}else{
+					area = item.building.name;
+				}
+				li.orderId = item.id; /*目标送货人的id*/
+				if (index%2 == 0) {
+					li.className = 'tableView-cell mui-input-row mui-radio mui-left'; 
+				} else{
+					li.className = 'tableView-cell-active mui-input-row mui-radio mui-left'; 
+				}
+				li.innerHTML = '<span class="list-common-style">' + item.name + '</span>'
+				+ '<span class="list-common-style">' + area + '</span>'
+				+ '<input name="radio1" type="radio"' + 'data-employee-id="' + item.id + '">';
+				table.appendChild(li, table.firstChild);
+			})
+		}
+		
 		// 左边 radio 点击事件
 		mui('.mui-content').on('change', 'input', function(){
-			console.log("22**" + this.value);
+			employeeId = this.getAttribute('data-employee-id');
+			console.log("**" + employeeId);
 		})
+		// 确定按钮点击事件
+		document.querySelector('.nav-right').addEventListener('tap',function(){
+			postData();
+		})
+		
+		
+		// 提交分单信息
+		function postData(){
+			if (employeeId == null || employeeId.length == 0) {
+				alert("请选择分单人!");
+			}else{
+				mui.ajax(BASE_URL + CHANGE_SHIPMAN,{
+					data: {
+						order_id: self.listID,
+						employee_id: employeeId,
+						format: 'json'
+					},
+					dataType: DATA_TYPE,
+					type: REQUEST_TYPE,  
+					timeout: TIME_OUT,   
+					beforeSend: function(data) {
+						plus.nativeUI.showWaiting();
+					},
+					success: function(data){ 
+						plus.nativeUI.closeWaiting();
+						if (data.status == 100) {
+							mui.toast(data.msg);
+							setTimeout(function(){
+						        mui.back();
+						    },1200);
+						}else{ 
+							mui.toast(data.status + data.msg);
+						}
+					},
+					error: function(xhr, type, errerThrown){
+						mui.toast(NET_ERROR);
+						plus.nativeUI.closeWaiting();
+					}
+				});
+			}
+		};
+		
+		
+		
 	</script>
 </html>

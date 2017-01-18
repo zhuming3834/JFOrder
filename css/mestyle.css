@@ -16,6 +16,9 @@
 	float: right;
 	color: #9a9a9a;
 }
+.date{
+	margin-left: 5px;
+}
 .start-date,.end-date{
 	height: 40px;
 	margin-top: 2px;
@@ -98,7 +101,7 @@ button{
 	/*padding: 15px 0px;*/
 	background-color: white;
 	margin-top: 10px;
-	margin-bottom: 50px;
+	margin-bottom: 20px;
 	text-align: center;
 	position: relative;
 }
@@ -125,20 +128,19 @@ button{
 	width: 100%;
 	height: 1px;
 	background-color: #EEEEEE;
+	margin-top: 3px;
+}
+.mui-input-row{
+	height: 46px !important;
 }
 .mui-input-row label{
 	height: 46px;
 	line-height: 46px;
 	padding: 0px 10px;
 }
-input[type=text]{
-	/*width: calc(100% - 70px);
-	height: 30px;
-	line-height: 30px;
-	float: right; 
-	border: none;
-	margin: 0px;
-	margin-top: 7px; */
+input{
+	/*padding: 16px !important;*/
+	margin-top: 3px !important;
 }
 .login-btn{
 	width: calc(100% - 20px);
@@ -148,4 +150,11 @@ input[type=text]{
 	font-weight: 800;
 	font-size: 18px;
 	background-color: #007dff;
+}
+.loginOut{
+	margin-bottom: 50px;
+	width: calc(100% - 20px);
+	height: 44px;
+	margin-left: 10px;
+	font-size: 18px;
 }

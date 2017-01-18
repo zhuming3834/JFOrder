@@ -9,10 +9,12 @@
       "json/home.json",
       "template/home/homelist.html",
       "css/homestyle.css",
-      "css/app.css"
+      "css/app.css",
+      "js/system.js"
     ],
     "refer": [
-      "template/home/homelist.html"
+      "template/home/homelist.html",
+      "template/home/goodslist.html"
     ]
   },
   "index.html": {
@@ -22,13 +24,16 @@
       "fonts/mui.ttf",
       "css/mui.min.css",
       "fonts/iconfont.css",
-      "fonts/iconfont.ttf"
+      "fonts/iconfont.ttf",
+      "js/system.js",
+      "template/home/homelist.html"
     ],
     "refer": [
       "template/me/index.html",
       "template/home/index.html",
       "template/order/index.html",
-      "template/login/login.html"
+      "template/login/login.html",
+      "template/home/homelist.html"
     ]
   },
   "template/home/homelist.html": {
@@ -40,7 +45,9 @@
       "css/mui.min.css",
       "css/style.css",
       "images/icon-nav.png",
-      "css/homestyle.css"
+      "css/homestyle.css",
+      "js/system.js",
+      "css/app.css"
     ],
     "refer": [
       "template/home/goodslist.html",
@@ -58,7 +65,10 @@
       "images/icon-money.png",
       "js/mui.picker.min.js",
       "css/mui.picker.min.css",
-      "css/app.css"
+      "css/app.css",
+      "fonts/iconfont.css",
+      "js/system.js",
+      "fonts/iconfont.ttf"
     ],
     "refer": [
       "template/login/login.html"
@@ -72,8 +82,10 @@
       "fonts/mui.ttf",
       "images/icon-back.png",
       "css/homestyle.css",
-      "css/app.css"
-    ]
+      "css/app.css",
+      "js/system.js"
+    ],
+    "refer": []
   },
   "template/home/reporterror.html": {
     "resources": [
@@ -81,8 +93,12 @@
       "images/icon-back.png",
       "fonts/mui.ttf",
       "css/mui.min.css",
-      "css/style.css"
-    ]
+      "css/style.css",
+      "js/system.js",
+      "css/app.css",
+      "css/homestyle.css"
+    ],
+    "refer": []
   },
   "template/order/index.html": {
     "resources": [
@@ -91,7 +107,8 @@
       "css/style.css",
       "css/orderstyle.css",
       "js/mui.min.js",
-      "css/app.css"
+      "css/app.css",
+      "js/system.js"
     ],
     "refer": [
       "template/order/repolicy.html",
@@ -105,15 +122,22 @@
       "js/mui.min.js",
       "fonts/mui.ttf",
       "css/mui.min.css",
-      "css/app.css"
-    ]
+      "css/app.css",
+      "js/system.js"
+    ],
+    "refer": []
   },
   "template/login/login.html": {
     "resources": [
       "css/mestyle.css",
       "js/mui.min.js",
       "fonts/mui.ttf",
-      "css/mui.min.css"
+      "css/mui.min.css",
+      "js/system.js",
+      "css/app.css"
+    ],
+    "refer": [
+      "index.html"
     ]
   }
 }

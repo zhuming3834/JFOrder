@@ -1,4 +1,4 @@
-<!doctype html>
+<!--<!doctype html>
 <html>
 
 	<head>
@@ -13,34 +13,30 @@
 	</head>
 
 	<body>
-		<header class="mui-bar mui-bar-nav jfbar">
+		<!--<header class="mui-bar mui-bar-nav jfbar">
 			<h1 class="mui-title nav-title">功能</h1>
 			<a class="nav-right">原料</a>
-		</header>
+		</header>-->
 		<div class="mui-content">
-		
 		</div>
 	</body>
 	<script src="../../js/mui.min.js"></script>
+	<script type="text/javascript" src="../../js/system.js" ></script>
 	<script type="text/javascript"> 
 		mui.init({
 			gestureConfig:{
 				doubletap:true
 			}, 
-			subpages:[{
+			 subpages:[{
 				url:'homelist.html',
-				id:'homelist.html',
+				id:'homelist.html', 
 				styles:{
-					top: '45px',
+					top: '0px',
 					bottom: '0px',
 				}
 			}]
 		});
 		mui.plusReady(function(){
-			// 设置状态栏 颜色
-			plus.navigator.setStatusBarBackground("#007dFF");
-			// 设置状态栏 样式
-			plus.navigator.setStatusBarStyle('UIStatusBarStyleDefault');
 		})
 		var contentWebview = null;
 		document.querySelector('header').addEventListener('doubletap',function () {
@@ -49,5 +45,36 @@
 			}
 			contentWebview.evalJS("mui('#pullrefresh').pullRefresh().scrollTo(0,0,100)");
 		});
+		document.querySelector('.nav-right').addEventListener('tap',function(){
+			var fontPage = plus.webview.getWebviewById('homelist.html');
+//		 	fontPage.reload(); 
+		 	mui.fire(fontPage,"refresh");
+			var ids = localStorage.getItem(ORDER_LIST);
+			console.log('--' + ids);
+			if (ids == null || ids == undefined || ids.length == 0) {
+				alert("请选择需要计算原料的订单");
+				return;
+			} else{
+				// 原料
+				var animationType = "slide-in-right";//页面显示动画，默认为”slide-in-right“；
+				var animationTime = 100; //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200
+				mui.openWindow({
+					url:"goodslist.html",
+					id:"goodslist.html",
+					show:{
+						autoShow:true,//页面loaded事件发生后自动显示，默认为true
+	      				aniShow:animationType,
+	     				duration:animationTime,
+					}, 
+					extras:{
+						goodsIDs: ids,
+						enterType: '1',
+						goodsID: '1'
+					}
+				})
+			}
+		})
+		
+		
 	</script>
-</html>
+</html>-->

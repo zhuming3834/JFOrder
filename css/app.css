@@ -5,7 +5,9 @@
 	width: 330px !important;
 	margin: auto;
 }
-
+.mui-content{
+	background-color: #d9dcdc;
+}
 
 /*
  * 公共的css文件，每个页面的html文件都需要包含这个css文件

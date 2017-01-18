@@ -65,7 +65,25 @@
 	float: right;
 	color: white;
 	font-weight: 800;
-	background-color: #f7a608;
+	background-color: blue;
+	border: 0px;
+	border-radius: 20px;
+	padding: 7px 12px 5px;
+}
+.waitack{ 
+	float: right;
+	color: white;
+	font-weight: 800;
+	background-color: red;
+	border: 0px;
+	border-radius: 20px;
+	padding: 7px 12px 5px;
+}
+.queue{ 
+	float: right;
+	color: white;
+	font-weight: 800;
+	background-color: green;
 	border: 0px;
 	border-radius: 20px;
 	padding: 7px 12px 5px;
@@ -84,8 +102,8 @@
 	color: #007DFF;
 	font-size: 14px;
 	border-bottom: 1px solid #EEEEEE;
-	height: 30px;
-	line-height: 30px;
+	/*height: 30px;
+	line-height: 30px;*/
 }
 .line2{
 	background-color: #f1f9ff;
@@ -114,6 +132,7 @@
 .order-address,.order-sender{
 	color: #555555;
 	font-size: 16px;
+	/*padding: 8px 40px 8px 8px;*/
 }
 .line3{
 	padding: 8px;
@@ -134,7 +153,7 @@
 	background-color: #2fbf94;
 	border: 1px solid #2fbf94;
 }
-.button-error{
+.button-fendan,.button-error{
 	float: right;
 	right: 15px;
 	color: #555555;
@@ -142,6 +161,7 @@
 	padding: 8px 12px 6px;
 	border: 1px solid #c5c5c5;
 }
+
 .finish{
 	float: right;
 	color: #f7a608;
@@ -162,14 +182,22 @@
 	color: #555555;
 	font-size: 14px;
 	border-bottom: 1px solid #EEEEEE;
-	height: 30px;
-	line-height: 30px;
+	/*height: 30px;
+	line-height: 30px;*/
 }
 .tomorrow{
-	float: right;
+	/*float: right;
 	color: #007dff;
 	font-weight: 800;
+	padding: 7px 12px 5px;*/
+	float: right;
+	color: white;
+	font-weight: 800;
+	background-color: #f7a608;
+	border: 0px;
+	border-radius: 20px;
 	padding: 7px 12px 5px;
+	
 }
 .goods-list-header{
 	height: 44px;

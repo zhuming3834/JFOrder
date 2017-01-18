@@ -19,17 +19,17 @@
 		</header>
 		<div class="mui-content">
 			<div class="report-error">
-				<div class="mui-checkbox error-item">
+				<div class="mui-radio error-item">
 					<span class="error-span">缺货</span>
-					<input class="error-checkbox" name="checkbox" type="checkbox">
+					<input class="error-radio" name="radio" type="radio" data-value="缺货">
 				</div>
-				<div class="mui-checkbox error-item">
-					<span class="error-span">缺货</span>
-					<input class="error-checkbox" name="checkbox" type="checkbox">
+				<div class="mui-radio error-item">
+					<span class="error-span">失联</span>
+					<input class="error-radio" name="radio" type="radio" data-value="失联">
 				</div>
-				<div class="mui-checkbox error-item">
-					<span class="error-span">缺货</span>
-					<input class="error-checkbox" name="checkbox" type="checkbox">
+				<div class="mui-radio error-item">
+					<span class="error-span">其他</span>
+					<input class="error-radio" name="radio" type="radio" data-value="其他">
 				</div>
 				<textarea class="error-textarea" placeholder="请输入详细情况说明"></textarea>
 				<div class="button-area">
@@ -40,27 +40,75 @@
 		</div>
 	</body>
 	<script src="../../js/mui.min.js"></script>
+	<script type="text/javascript" src="../../js/system.js" ></script>
 	<script type="text/javascript"> 
 		mui.init({
 			swipeBack: true, 
 		});
 		var self = null;
-		
+		var errorType = null;
+		var textarea = null;
 		mui.plusReady(function(){
 			self = plus.webview.currentWebview();
+			textarea = document.querySelector('.error-textarea');
 		})
-		function sendData(){
-			
-		}
 		// 关闭按钮点击事件
 		mui(".close-button")[0].addEventListener('tap',function(){
 			console.log("关闭");
 			mui.back(); // 返回
 		})
-		// 关闭按钮点击事件
+		// 保存按钮点击事件
 		mui(".save-button")[0].addEventListener('tap',function(){
 			console.log("保存");
+			if (errorType == null || errorType == undefined || errorType.length == 0) {
+				alert("请选择报错类型");
+				return;
+			}
+			
 			sendData();
 		})
+		// 全选按钮点击事件
+        mui('body').on('change','.error-radio',function(){
+        		errorType = this.getAttribute('data-value');
+        		console.log(errorType); 
+        })
+		
+		
+		// 提交报错信息
+		function sendData(){
+			console.log(textarea.value);
+			mui.ajax(BASE_URL + CHANGE_ORDER_STATUS,{
+				data: {
+					order_id: self.listID,
+					error_type: errorType,
+					error_text: textarea.value,
+					format: 'json',
+					error: 'true'
+				},
+				dataType: DATA_TYPE,
+				type: REQUEST_TYPE,  
+				timeout: TIME_OUT,   
+				beforeSend: function(data) {
+					plus.nativeUI.showWaiting();
+				},
+				success: function(data){ 
+					plus.nativeUI.closeWaiting();
+					if (data.status == 100) {
+						mui.toast(data.msg);
+						setTimeout(function(){
+					        mui.back();
+					    },1200);
+					}else{ 
+						mui.toast(data.status + data.msg);
+					}
+				},
+				error: function(xhr, type, errerThrown){
+					mui.toast(NET_ERROR);
+					plus.nativeUI.closeWaiting();
+				}
+			});
+		}
+		
+		
 	</script>
 </html>

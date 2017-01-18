@@ -8,10 +8,15 @@
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 		<link href="../../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../css/app.css" />
 		<link rel="stylesheet" href="../../css/homestyle.css" />
 	</head>
 
 	<body>
+		<header class="mui-bar mui-bar-nav jfbar">
+			<h1 class="mui-title nav-title">功能</h1>
+			<a class="nav-right">原料</a>
+		</header>
 		<div id="pullrefresh" class="mui-content mui-scroll-wrapper">
 			<div class="mui-scroll">
 				<ul class="mui-table-view">
@@ -34,7 +39,7 @@
 				    		</div>
 				    		<div class="order-mark">订单备注:请将车厘子分两包包装 三斤一包</div>
 				    		<div class="mui-checkbox line3">
-							<input class="checkbox" name="checkbox" type="checkbox" checked>
+							<input class="checkbox1" name="checkbox" type="checkbox" checked>
 							<button class="button-goods" type="button">商品</button>
 							<button class="button-error" type="button">报错</button>
 				    		</div>
@@ -55,7 +60,7 @@
 				    		</div>
 				    		<div class="order-mark">订单备注:请将车厘子分两包包装 三斤一包</div>
 				    		<div class="mui-checkbox line3">
-							<input class="checkbox" name="checkbox" type="checkbox" checked>
+							<input class="checkbox1" name="checkbox" type="checkbox" checked>
 							<button class="button-goods" type="button">商品</button>
 							<button class="button-error" type="button">报错</button>
 				    		</div>
@@ -76,7 +81,7 @@
 				    		</div>
 				    		<div class="order-mark">订单备注:请将车厘子分两包包装 三斤一包</div>
 				    		<div class="mui-checkbox line3">
-							<input class="checkbox" name="checkbox" type="checkbox" checked>
+							<input class="checkbox1" name="checkbox" type="checkbox" checked>
 							<button class="button-goods" type="button">商品</button>
 							<button class="button-error" type="button">报错</button>
 				    		</div>
@@ -97,7 +102,7 @@
 				    		</div>
 				    		<div class="order-mark">订单备注:请将车厘子分两包包装 三斤一包</div>
 				    		<div class="mui-checkbox line3">
-							<input class="checkbox" name="checkbox" type="checkbox" checked>
+							<input class="checkbox1" name="checkbox" type="checkbox" checked>
 							<button class="button-goods" type="button">商品</button>
 							<button class="button-error" type="button">报错</button>
 				    		</div>
@@ -118,7 +123,7 @@
 				    		</div>
 				    		<div class="order-mark">订单备注:请将车厘子分两包包装 三斤一包</div>
 				    		<div class="mui-checkbox line3">
-							<input class="checkbox" name="checkbox" type="checkbox" checked>
+							<input class="checkbox1" name="checkbox" type="checkbox" checked>
 							<button class="button-goods" type="button">商品</button>
 							<button class="button-error" type="button">报错</button>
 				    		</div>
@@ -128,8 +133,9 @@
 		</div>
 		<!-- 顶部打印 -->
 		<div class="mui-checkbox bottom-select">
-			<input class="select-all" name="checkbox" type="checkbox" checked>
-    			<button class="print" type="button">打印订单</button>
+			<input class="select-all" name="checkbox" type="checkbox">
+			<span class="allText">全选</span>
+    			<button class="print" id="printer" type="button">打印订单</button>
 		</div>
 	</body>
 	<script src="../../js/mui.min.js"></script>
@@ -143,12 +149,12 @@
 					callback: pulldownRefresh 
 				}
 			},
-			up: {
-				contentrefresh: '正在加载...',
-				callback: pullupRefresh
-			}
 		});
-		var table = document.body.querySelector('.mui-table-view');
+		var table = null;
+		var checkDice = new Array();
+		var checkbox = null;
+		var selectAll = null;
+		var dataStr = null;
 		/**
 		 * 下拉刷新具体业务实现
 		 */
@@ -157,14 +163,6 @@
 				refreshData();
 				mui('#pullrefresh').pullRefresh().endPulldownToRefresh(); //refresh completed
 			}, 1500);
-		}
-		/**
-		 * 上拉加载具体业务实现
-		 */
-		function pullupRefresh() { 
-			setTimeout(function() {
-				mui('#pullrefresh').pullRefresh().endPullupToRefresh(); 
-			}, 1500); 
 		}
 		if (mui.os.plus) {
 				mui.plusReady(function() {
@@ -179,16 +177,20 @@
 				});
 			}
 		mui.plusReady(function(){
+			table = document.body.querySelector('.mui-table-view');
+			selectAll = document.querySelector('.select-all');
 			// 进来显示登录缓存的数据
-			showData();
+			refreshData();
 		})
-		// 添加send自定义事件监听
-		window.addEventListener('login',function(event){
-		 	showData();
-		});
 		function showData(){
-			analyData(JSON.parse(localStorage.getItem(ORDERS)));
+			var oderS = JSON.parse(localStorage.getItem(ORDERS));
+			if (oderS.length == 0) {
+				mui.toast("暂时没有订单~");
+			}else{
+				analyData(oderS);
+			}
 		};
+		
 		// 刷新数据
 		function refreshData(){
 			mui.ajax(BASE_URL + LOGIN,{
@@ -201,12 +203,12 @@
 				type: REQUEST_TYPE,  
 				timeout: TIME_OUT,   
 				beforeSend: function(data) {
-					plus.nativeUI.showWaiting(REFRESH_ING);
+					plus.nativeUI.showWaiting();
 				},
 				success: function(data){ 
 					plus.nativeUI.closeWaiting();
+//					alert(data.msg + data.status);
 					if (data.status == 100) {
-						mui.toast(REFRESH_SUCCESS);
 						// 设置登录状态  退出登录时设置为 false
 						localStorage.setItem(IS_LOGIN,"true");
 						// 存储登录用户信息
@@ -215,12 +217,14 @@
 						localStorage.setItem(EMPLOYEES,JSON.stringify(data.employees));
 						// 存储订单列表
 						localStorage.setItem(ORDERS,JSON.stringify(data.orders));
-						analyData(data.orders);
-						   
-						
-						;
+						if (data.orders.length == 0) {
+							mui.toast("暂时没有订单~");
+						}else{
+							analyData(data.orders);
+							mui.toast("操作成功");
+						}
 					}else{ 
-						mui.toast(REFRESH_FAILE + data.status);
+						mui.toast(data.status);
 					}
 				},
 				error: function(xhr, type, errerThrown){
@@ -233,6 +237,7 @@
 		function analyData(orData){
 			table.innerHTML = "";
 			mui.each(orData, function(index, item) {
+				checkDice[item.id] = 'X';
 				var li = document.createElement('li');
 				li.orderId = item.id; /*订单id*/
 				var time = item.ship_time.split("T")[0];
@@ -240,35 +245,19 @@
 				var sendStatus = null; 
 				var sigeButton = null;
 				switch (item.status) {
-					case 'waitpay':
-						sendStatus = "未付款";
-						break;
 					case 'waitack':
-						sendStatus = "待确认";
-						break;
-					case 'card':
-						sendStatus = "队列中";
+						sendStatus = "待确认"; // 红色
+						sigeButton = '<button type="button" class="waitack"' + 'button-send-id="' + item.id + '">' + sendStatus + '</button></div>';
 						break;
 					case 'queue':
-						sendStatus = "队列中";
+						sendStatus = "队列中";// 绿色
+						sigeButton = '<button type="button" class="queue"' + 'button-send-id="' + item.id + '">' + sendStatus + '</button></div>';
 						break;
 					case 'ship':
-						sendStatus = "送货中";
-						break;
-					case 'finish':
-						sendStatus = "已完成";
-						break;
-					case 'cancel':
-						sendStatus = "已取消";
-						break;
-					case 'paid_card':
-						sendStatus = "已刷卡";
-						break;
-					case 'error':
-						sendStatus = "报错单";
+						sendStatus = "送货中"; // 蓝色
+						sigeButton = '<button type="button" class="sengding"' + 'button-send-id="' + item.id + '">' + sendStatus + '</button></div>';
 						break;
 				}
-				sigeButton = '<button type="button" class="sengding"' + 'button-send-id="' + item.id + '">' + sendStatus + '</button></div>';
 				var payType = null;
 				switch (item.pay_type) {
 					case 'cash':
@@ -298,7 +287,11 @@
 				}
 				var href = "tel:" + item.phone;
 				var address = "地址: " + item.address;
-				var sender = "(配送人:" + item.ship_man_id + ")";
+				if (item.ship_man_id == null || item.ship_man_id == undefined || item.ship_man_id == "null" || item.ship_man_id == "") {
+					var sender = "(配送人:无)";
+				} else{
+					var sender = "(配送人:" + item.ship_man_id + ")";
+				}
 				if (item.remark == "" || item.remark == null || item.remark == undefined) {
 					var mark = "备注: " + "无";
 				} else{
@@ -318,12 +311,107 @@
 	    			+ '<span class="order-sender">'+ sender + '</span></p></div>'
 	    			+ '<div class="order-mark">' + mark + '</div>'
 	    			+ '<div class="mui-checkbox line3">'
-				+ '<input class="checkbox" name="checkbox" type="checkbox">'
+				+ '<input class="checkbox1" name="checkbox" type="checkbox"' + 'data-check-id="' + item.id + '">'
 				+ '<button class="button-goods" type="button"' + 'data-button-goods-id="' + item.id + '">' + "商品" + '</button>'
 				+ '<button class="button-error" type="button"' + 'data-button-error-id="' + item.id + '">' + "报错" + '</button></div>';
 				table.appendChild(li, table.firstChild);
 			});
 		}
+		// 全选 刷新页面
+		function selectAllCheckbox(orData,flag){
+			table.innerHTML = "";
+			mui.each(orData, function(index, item) {
+				if (flag == 1) {
+					checkDice[item.id] = item.id;
+					checkbox = '<input class="checkbox1" name="checkbox" checked type="checkbox"' + 'data-check-id="' + item.id + '">'
+				} else{
+					checkDice[item.id] = "X";
+					checkbox = '<input class="checkbox1" name="checkbox" type="checkbox"' + 'data-check-id="' + item.id + '">'
+				}
+				var li = document.createElement('li');
+				li.orderId = item.id; /*订单id*/
+				var time = item.ship_time.split("T")[0];
+				li.className = 'mui-table-view-cell mui-collapse-content'; 
+				var sendStatus = null; 
+				var sigeButton = null;
+				switch (item.status) {
+					case 'waitack':
+						sendStatus = "待确认"; // 红色
+						sigeButton = '<button type="button" class="waitack"' + 'button-send-id="' + item.id + '">' + sendStatus + '</button></div>';
+						break;
+					case 'queue':
+						sendStatus = "队列中";// 绿色
+						sigeButton = '<button type="button" class="queue"' + 'button-send-id="' + item.id + '">' + sendStatus + '</button></div>';
+						break;
+					case 'ship':
+						sendStatus = "送货中"; // 蓝色
+						sigeButton = '<button type="button" class="sengding"' + 'button-send-id="' + item.id + '">' + sendStatus + '</button></div>';
+						break;
+				}
+				var payType = null;
+				switch (item.pay_type) {
+					case 'cash':
+						payType = "货到付款";
+						break;
+					case 'inshop':
+						payType = "店内现金";
+						break;
+					case 'card':
+						payType = "店内刷卡";
+						break;
+					case 'alipay':
+						payType = "支付宝";
+						break;
+					case 'credit':
+						payType = "余额支付";
+						break;
+					case 'wechat':
+						payType = "微信支付";
+						break;
+					case 'pos':
+						payType = "POS机刷卡";
+						break;
+					case 'receive':
+						payType = "到店自提";
+						break;
+				}
+				var href = "tel:" + item.phone;
+				var address = "地址: " + item.address;
+				if (item.ship_man_id == null || item.ship_man_id == undefined || item.ship_man_id == "null" || item.ship_man_id == "") {
+					var sender = "(配送人:无)";
+				} else{
+					var sender = "(配送人:" + item.ship_man_id + ")";
+				}
+				if (item.remark == "" || item.remark == null || item.remark == undefined) {
+					var mark = "备注: " + "无";
+				} else{
+					var mark = "备注: " + item.remark;
+				}
+				
+				li.innerHTML = '<div class="line1">'
+	    			+ '<span class="order-time">' + time + '</span>'
+	    			+ '<span class="order-pay">' + payType + "￥" + item.price + '</span>'
+	    			+ sigeButton
+	    			+ '<div class="line2">'
+	    			+ '<p class="about-order">'
+	    			+ '<span class="customer-name"><span class="mui-icon mui-icon-person"></span>' + item.receiver + '</span>'
+	    			+ '<span class="customer-tel"' + 'data-tel="' + item.phone + '"' + 'data-name="' + item.receiver + '"><span class="mui-icon mui-icon-phone"></span>' + item.phone + '</span></p>'
+	    			+ '<p class="address"><span class="address-nav"' + 'data-address="' + item.address + '"></span>'
+	    			+ '<span class="order-address"><span class="mui-icon mui-icon-map"></span>' + address + '</span>'
+	    			+ '<span class="order-sender">'+ sender + '</span></p></div>'
+	    			+ '<div class="order-mark">' + mark + '</div>'
+	    			+ '<div class="mui-checkbox line3">'
+				+ checkbox
+				+ '<button class="button-goods" type="button"' + 'data-button-goods-id="' + item.id + '">' + "商品" + '</button>'
+				+ '<button class="button-error" type="button"' + 'data-button-error-id="' + item.id + '">' + "报错" + '</button></div>';
+				table.appendChild(li, table.firstChild);
+			});
+//			dataStr = makeData(checkDice);
+//			console.log(dataStr);
+//         	localStorage.setItem(ORDER_LIST,dataStr);
+		}
+		
+		
 		
 		// 拨打电话
 		mui('.mui-content').on('tap','.customer-tel',function(){
@@ -341,7 +429,7 @@
 		// 到百度地图
 		mui('.mui-content').on('tap','.address-nav',function(){
 			var address = this.getAttribute('data-address');
-			console.log("address = " + address);
+//			console.log("address = " + address);
 			// http://ask.dcloud.net.cn/question/14404
 			// 调起百度地图 
 			// http://lbsyun.baidu.com/index.php?title=uri/api/android
@@ -350,17 +438,16 @@
 			// Android端
 			var anhref = "bdapp://map/geocoder?src=openApiDemo&address=" + address;
 			var osName = plus.os.name;
-			if (osName == "iOS") {
-				window.open(href);
-			} else{
-				window.open(anhref);
-			}
-		}) 
-		// 送货按钮
-		mui('.mui-content').on('tap','.sengding',function(){
-			var parent = this.getAttribute('button-send-id');
-//			console.log("id = " + parent);
-			
+			var btn = ["取消","确定"];
+			mui.confirm("请确定是否安装百度地图","本应用需要打开百度地图",btn,function(e){
+				if(e.index == 1){
+					if (osName == "iOS") {
+						window.open(href);
+					} else{
+						window.open(anhref);
+					}
+				}
+			});
 		}) 
 		// 报错按钮
 		mui('.mui-content').on('tap','.button-error',function(){
@@ -378,13 +465,16 @@
 				}, 
 				extras:{
 					listID: id
+				},
+				waiting:{
+					autoShow:false
 				}
 			})
 		}) 
 		// 商品按钮
 		mui('.mui-content').on('tap','.button-goods',function(){
 			var id = this.getAttribute('data-button-goods-id');
-			console.log("订单ID = " + id);
+//			console.log("订单ID = " + id);
 			
 			var animationType = "slide-in-right";//页面显示动画，默认为”slide-in-right“；
 			var animationTime = 100; //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200
@@ -398,10 +488,192 @@
 				}, 
 				extras:{
 					goodsID: id
+				},
+				waiting:{
+					autoShow:false
 				}
 			})
 		}) 
+		// 全选按钮点击事件
+        mui('body').on('change','.select-all',function(){
+//      		console.log("全选"); 
+        		 if (this.checked) { 
+                selectAllCheckbox(JSON.parse(localStorage.getItem(ORDERS)),1);
+            } else{
+                selectAllCheckbox(JSON.parse(localStorage.getItem(ORDERS)),0); 
+            }
+        })
+		// 事件绑定
+        mui('.mui-content').on('change','.checkbox1',function(){
+        		var orderId = this.getAttribute('data-check-id');
+//          console.log("id = " + orderId + " status = " + this.checked);
+            if (this.checked) { 
+                checkDice[orderId] = orderId;
+            } else{
+                checkDice[orderId] = 'X';
+            }
+            isSelectAll(checkDice);
+        })
+        
+        function isSelectAll(dice){
+        		var result = '';
+        		var count = null;
+            for (var key in dice) {
+                if (dice[key] != 'X') {
+                    result = result + dice[key] + ',';
+                } 
+                count ++ ;
+            }
+            var temp = result.substring(0,result.length - 1);
+            var dataArray = temp.split(',');
+//          console.log(dataArray.length);
+//          console.log(count);
+            if (dataArray.length == count) {
+            		selectAll.checked = true;
+            } else{
+            		selectAll.checked = false;
+            }
+//          console.log('被选中的checkbox的ID是：' + makeData(checkDice));
+//          dataStr = makeData(checkDice);
+//          localStorage.setItem(ORDER_LIST,dataStr);
+        }
+        
+        // 数据处理
+        function makeData(dice){
+            var result = '';
+            for (var key in dice) {
+                if (dice[key] != 'X') {
+                    result = result + dice[key] + ',';
+                } 
+            }
+            // 去除字符串最后的','后返回
+            return result.substring(0,result.length - 1);
+        }
 		
+		// 修改订单状态
+		mui('.mui-content').on('tap','.sengding',function(){
+			var orderID = this.getAttribute('button-send-id');
+//			console.log(orderID);
+			var btn = ["取消","确定"];
+			mui.confirm("确定需要修改订单状态吗?","",btn,function(e){
+				if(e.index == 1){
+					changeStatus(orderID);
+				}
+			});
+		}) 
+		// 修改订单状态
+		mui('.mui-content').on('tap','.waitack',function(){
+			var orderID = this.getAttribute('button-send-id');
+//			console.log(orderID);
+			var btn = ["取消","确定"];
+			mui.confirm("确定需要修改订单状态吗?","",btn,function(e){
+				if(e.index == 1){
+					changeStatus(orderID);
+				}
+			});
+		}) 
+		// 修改订单状态
+		mui('.mui-content').on('tap','.queue',function(){
+			var orderID = this.getAttribute('button-send-id');
+//			console.log(orderID);
+			var btn = ["取消","确定"];
+			mui.confirm("确定需要修改订单状态吗?","",btn,function(e){
+				if(e.index == 1){
+					changeStatus(orderID);
+				}
+			});
+		}) 
+		
+		// 改变订单状态
+		function changeStatus(orID){
+			mui.ajax(BASE_URL + CHANGE_ORDER_STATUS,{
+				data: {
+					order_id: orID,
+					format: 'json'
+				},
+				dataType: DATA_TYPE,
+				type: REQUEST_TYPE,  
+				timeout: TIME_OUT,   
+				beforeSend: function(data) {
+//					plus.nativeUI.showWaiting();
+				},
+				success: function(data){ 
+					plus.nativeUI.closeWaiting();
+					if (data.status == 100) {
+//						mui.toast(data.msg);
+						setTimeout(function(){
+					        refreshData();
+					    },100);
+					}else{ 
+						mui.toast(data.status + data.msg);
+					}
+				},
+				error: function(xhr, type, errerThrown){
+					mui.toast(NET_ERROR);
+//					plus.nativeUI.closeWaiting();
+				}
+			});
+		};
+		
+		document.getElementById('printer').addEventListener('tap',function(){
+//			console.log('--' + dataStr);
+			if (dataStr == null || dataStr == undefined || dataStr.length == 0) {
+				alert("请选择需要打印的订单");
+			} else{
+				printOrders(dataStr); 
+			}
+		})
+		function printOrders(ids){
+			mui.ajax(BASE_URL + PRINT_ORDER_TICKET,{
+				data: {
+					selected_orders: ids,
+					format: 'json'
+				},
+				dataType: DATA_TYPE,
+				type: REQUEST_TYPE,  
+				timeout: TIME_OUT,   
+				beforeSend: function() {
+					plus.nativeUI.showWaiting();
+				},
+				success: function(data){ 
+					plus.nativeUI.closeWaiting();
+					mui.toast(data.msg);
+				},
+				error: function(xhr, type, errerThrown){
+					mui.toast(NET_ERROR);
+					plus.nativeUI.closeWaiting();
+				}
+			});
+		}
+		document.querySelector('.nav-right').addEventListener('tap',function(){
+			dataStr = makeData(checkDice);
+//			console.log('--' + dataStr);
+			if (dataStr == null || dataStr == undefined || dataStr.length == 0) {
+				alert("请选择需要计算原料的订单");
+				return;
+			} else{
+				// 原料
+				var animationType = "slide-in-right";//页面显示动画，默认为”slide-in-right“；
+				var animationTime = 100; //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200
+				mui.openWindow({
+					url:"goodslist.html",
+					id:"goodslist.html",
+					show:{
+						autoShow:true,//页面loaded事件发生后自动显示，默认为true
+	      				aniShow:animationType,
+	     				duration:animationTime,
+					}, 
+					extras:{
+						goodsIDs: dataStr,
+						enterType: '1',
+						goodsID: '1'
+					},
+					waiting:{
+						autoShow:false
+					}
+				})
+			}
+		})
 
 	</script>
 </html>

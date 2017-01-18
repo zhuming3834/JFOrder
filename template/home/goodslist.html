@@ -48,7 +48,7 @@
 	<script type="text/javascript" src="../../js/system.js" ></script>
 	<script type="text/javascript"> 
 		mui.init({
-			swipeBack: true, 
+			swipeBack: true
 		});
 		mui('.mui-scroll-wrapper').scroll({
 			 scrollY: true, //是否竖向滚动
@@ -65,9 +65,16 @@
 		var goods = null;
 		mui.plusReady(function(){
 			self = plus.webview.currentWebview();
-			console.log(self.goodsID);
-			showData();
+			if (self.enterType == '1') {
+				console.log(self.goodsIDs);
+				document.querySelector('title').innerText = "原料列表";
+				showYuan();
+			} else{
+				console.log(self.goodsID);
+				showData();
+			}
 		})
+		// 商品列表
 		function showData(){
 			mui.ajax(BASE_URL + ORDER_ITEMS_DEILE,{
 				data: {
@@ -106,5 +113,45 @@
 				}
 			});
 		};
+		// 计算原料
+		function showYuan(){
+			mui.ajax(BASE_URL + MERGER_MATERIALS,{
+				data: {
+					selected_orders: self.goodsIDs,
+					format: 'json'
+				},
+				dataType: DATA_TYPE,
+				type: REQUEST_TYPE,  
+				timeout: TIME_OUT,   
+				beforeSend: function() {
+					plus.nativeUI.showWaiting();
+				},
+				success: function(data){ 
+					plus.nativeUI.closeWaiting();
+					if (data.status == 100) {
+						mui.each(data.resp, function(index, item) {
+							var listNum = index + 1;
+							var li = document.createElement('li');
+							if (index%2 == 0) {
+								li.className = 'tableView-cell'; 
+							} else{
+								li.className = 'tableView-cell-active'; 
+							}
+							li.innerHTML = '<span class="list-left list-common-style">' + listNum + '</span>'
+							+ '<span class="list-center list-common-style">' + item.name + '</span>'
+							+ '<span class="list-right list-common-style">' + item.quantity + '</span>'
+							table.appendChild(li, table.firstChild);
+						});
+					}else{
+						mui.toast(data.msg);
+					}
+				},
+				error: function(xhr, type, errerThrown){
+					mui.toast(NET_ERROR);
+					plus.nativeUI.closeWaiting();
+				}
+			});
+		};
+		
 	</script>
 </html>
