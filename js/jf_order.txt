@@ -1,6 +1,6 @@
 包名:cn.justfruit.order
 证书别名(key alias):jf_order
-私钥密码(key store path):jT%h4mHL
+私钥密码(key store path):123456
 password  yV4R#Gf2
 
 C:\java\jre1.8.0_112\bin>keytool -genkey -alias jf_order -keyalg RSA -validity 10000 -keystore jf_order.keystore

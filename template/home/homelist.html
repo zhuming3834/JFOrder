@@ -19,6 +19,7 @@
 		</header>
 		<div id="pullrefresh" class="mui-content mui-scroll-wrapper">
 			<div class="mui-scroll">
+				<span class="order-count">0单</span>
 				<ul class="mui-table-view">
 				    <!--<li class="mui-table-view-cell mui-collapse-content">
 				    		<div class="line1">
@@ -155,6 +156,8 @@
 		var checkbox = null;
 		var selectAll = null;
 		var dataStr = null;
+		var order_count = null;
+		
 		/**
 		 * 下拉刷新具体业务实现
 		 */
@@ -179,6 +182,7 @@
 		mui.plusReady(function(){
 			table = document.body.querySelector('.mui-table-view');
 			selectAll = document.querySelector('.select-all');
+			order_count = document.body.querySelector('.order-count');
 			// 进来显示登录缓存的数据
 			refreshData();
 		})
@@ -211,6 +215,7 @@
 					if (data.status == 100) {
 						// 设置登录状态  退出登录时设置为 false
 						localStorage.setItem(IS_LOGIN,"true");
+						localStorage.setItem(IS_SUPER,data.is_super);
 						// 存储登录用户信息
 						localStorage.setItem(USER,JSON.stringify(data.user));
 						// 存储员工列表
@@ -218,6 +223,8 @@
 						// 存储订单列表
 						localStorage.setItem(ORDERS,JSON.stringify(data.orders));
 						if (data.orders.length == 0) {
+							table.innerHTML = "";
+							order_count.innerText = 0 + '单';
 							mui.toast("暂时没有订单~");
 						}else{
 							analyData(data.orders);
@@ -236,7 +243,9 @@
 		// 数据解析
 		function analyData(orData){
 			table.innerHTML = "";
+			order_count.innerText = orData.length + '单';
 			mui.each(orData, function(index, item) {
+//				console.log('----+ ' + item.id)
 				checkDice[item.id] = 'X';
 				var li = document.createElement('li');
 				li.orderId = item.id; /*订单id*/
@@ -287,10 +296,13 @@
 				}
 				var href = "tel:" + item.phone;
 				var address = "地址: " + item.address;
-				if (item.ship_man_id == null || item.ship_man_id == undefined || item.ship_man_id == "null" || item.ship_man_id == "") {
-					var sender = "(配送人:无)";
-				} else{
+				var peisongren = null;
+				if (item.ship_man_id == null || item.ship_man_id == undefined || item.ship_man_id == "null" || item.ship_man_id == "" || item.ship_man_id == '该区域没有配送人') {
+					var sender = "(配送人:" + '该区域没有配送人' + ")";
+					peisongren = '<span class="order-sender" style="color:red;">'+ sender + '</span></p></div>'
+				}else{
 					var sender = "(配送人:" + item.ship_man_id + ")";
+					peisongren = '<span class="order-sender">'+ sender + '</span></p></div>'
 				}
 				if (item.remark == "" || item.remark == null || item.remark == undefined) {
 					var mark = "备注: " + "无";
@@ -308,7 +320,7 @@
 	    			+ '<span class="customer-tel"' + 'data-tel="' + item.phone + '"' + 'data-name="' + item.receiver + '"><span class="mui-icon mui-icon-phone"></span>' + item.phone + '</span></p>'
 	    			+ '<p class="address"><span class="address-nav"' + 'data-address="' + item.address + '"></span>'
 	    			+ '<span class="order-address"><span class="mui-icon mui-icon-map"></span>' + address + '</span>'
-	    			+ '<span class="order-sender">'+ sender + '</span></p></div>'
+	    			+ peisongren
 	    			+ '<div class="order-mark">' + mark + '</div>'
 	    			+ '<div class="mui-checkbox line3">'
 				+ '<input class="checkbox1" name="checkbox" type="checkbox"' + 'data-check-id="' + item.id + '">'
@@ -329,6 +341,7 @@
 					checkbox = '<input class="checkbox1" name="checkbox" type="checkbox"' + 'data-check-id="' + item.id + '">'
 				}
 				var li = document.createElement('li');
+//				console.log('---- ' + item.id);
 				li.orderId = item.id; /*订单id*/
 				var time = item.ship_time.split("T")[0];
 				li.className = 'mui-table-view-cell mui-collapse-content'; 
@@ -377,10 +390,13 @@
 				}
 				var href = "tel:" + item.phone;
 				var address = "地址: " + item.address;
-				if (item.ship_man_id == null || item.ship_man_id == undefined || item.ship_man_id == "null" || item.ship_man_id == "") {
-					var sender = "(配送人:无)";
-				} else{
+				var peisongren = null;
+				if (item.ship_man_id == null || item.ship_man_id == undefined || item.ship_man_id == "null" || item.ship_man_id == "" || item.ship_man_id == '该区域没有配送人') {
+					var sender = "(配送人:" + '该区域没有配送人' + ")";
+					peisongren = '<span class="order-sender" style="color:red;">'+ sender + '</span></p></div>'
+				}else{
 					var sender = "(配送人:" + item.ship_man_id + ")";
+					peisongren = '<span class="order-sender">'+ sender + '</span></p></div>'
 				}
 				if (item.remark == "" || item.remark == null || item.remark == undefined) {
 					var mark = "备注: " + "无";
@@ -398,7 +414,7 @@
 	    			+ '<span class="customer-tel"' + 'data-tel="' + item.phone + '"' + 'data-name="' + item.receiver + '"><span class="mui-icon mui-icon-phone"></span>' + item.phone + '</span></p>'
 	    			+ '<p class="address"><span class="address-nav"' + 'data-address="' + item.address + '"></span>'
 	    			+ '<span class="order-address"><span class="mui-icon mui-icon-map"></span>' + address + '</span>'
-	    			+ '<span class="order-sender">'+ sender + '</span></p></div>'
+	    			+ peisongren
 	    			+ '<div class="order-mark">' + mark + '</div>'
 	    			+ '<div class="mui-checkbox line3">'
 				+ checkbox
@@ -616,10 +632,12 @@
 		};
 		
 		document.getElementById('printer').addEventListener('tap',function(){
-//			console.log('--' + dataStr);
+			dataStr = makeData(checkDice);
+			console.log('--' + dataStr);
 			if (dataStr == null || dataStr == undefined || dataStr.length == 0) {
 				alert("请选择需要打印的订单");
 			} else{
+				console.log('打印');
 				printOrders(dataStr); 
 			}
 		})

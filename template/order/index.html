@@ -28,14 +28,15 @@
 					<a class="mui-control-item no-left" href="#item4" >
 						明日订单
 					</a>
-				</div>
+				</div>  
 			</h1>
-		</header>
+		</header>      
 		<div class="mui-content mui-scroll-wrapper">
 			<div class="mui-scroll">
 				<div id="item1" class="mui-control-content mui-active">
+					<span class="order-count1">0单</span>
 					<ul class="mui-table-view tableView1">
-						 <li class="mui-table-view-cell mui-collapse-content">
+			 			 <!--<li class="mui-table-view-cell mui-collapse-content">
 					    		<div class="line1">
 					    			<span class="order-time">2016-12-12</span>
 					    			<span class="order-pay">支付宝￥106.0</span>
@@ -122,12 +123,13 @@
 								<button class="button-goods" type="button">商品</button>
 								<button class="button-error" type="button">分单</button>
 					    		</div>
-					    </li> 
+					    </li> -->
 					</ul>
 				</div>
 				<div id="item2" class="mui-control-content">
+					<span class="order-count2">0单</span>
 					<ul class="mui-table-view tableView2">
-						<li class="mui-table-view-cell mui-collapse-content">
+						<!--<li class="mui-table-view-cell mui-collapse-content">
 					    		<div class="line1">
 					    			<span class="order-time">2016-12-12</span>
 					    			<span class="order-pay">支付宝￥106.0</span>
@@ -210,12 +212,13 @@
 					    		<div class="line3">
 								<button class="button-goods" type="button">商品</button>
 					    		</div>
-					    </li> 
+					    </li> -->
 					</ul>
 				</div>
 				<div id="item3" class="mui-control-content">
+					<span class="order-count3">0单</span>
 					<ul class="mui-table-view tableView3">
-						<li class="mui-table-view-cell mui-collapse-content">
+						<!--<li class="mui-table-view-cell mui-collapse-content">
 					    		<div class="line1">
 					    			<span class="order-time">2016-12-12</span>
 					    			<span class="order-pay">支付宝￥106.0</span>
@@ -302,12 +305,13 @@
 					    		<div class="line3">
 								<button class="button-goods" type="button">商品</button>
 					    		</div>
-					    </li> 
+					    </li>-->
 					</ul>
 				</div>
 				<div id="item4" class="mui-control-content">
+					<span class="order-count4">0单</span>
 					<ul class="mui-table-view tableView4">
-						<li class="mui-table-view-cell mui-collapse-content">
+						<!-- <li class="mui-table-view-cell mui-collapse-content">
 					    		<div class="line1">
 					    			<span class="order-time">2016-12-12</span>
 					    			<span class="order-pay">支付宝￥106.0</span>
@@ -394,7 +398,7 @@
 								<button class="button-goods" type="button">商品</button>
 								<button class="button-error" type="button">分单</button>
 					    		</div>
-					    </li> 
+					    </li> -->
 					</ul>
 				</div>
 			</div>
@@ -403,15 +407,29 @@
 	<script src="../../js/mui.min.js"></script>
 	<script type="text/javascript" src="../../js/system.js" ></script>
 	<script>
+		mui.init({
+			keyEventBind: {
+				backbutton: false,  //Boolean(默认true)关闭back按键监听
+				menubutton: false   //Boolean(默认true)关闭menu按键监听
+			}
+		});
 		var table1 = null; // 订单管理
 		var table2 = null; // 已完成订单
 		var table3 = null; // 已报错
 		var table4 = null; // 明日订单
+		var order_count1 = null;
+		var order_count2 = null;
+		var order_count3 = null;
+		var order_count4 = null;
 		mui.plusReady(function(){
 			table1 = document.body.querySelector('.tableView1');
 			table2 = document.body.querySelector('.tableView2');
 			table3 = document.body.querySelector('.tableView3');
 			table4 = document.body.querySelector('.tableView4');
+			order_count1 = document.body.querySelector('.order-count1');
+			order_count2 = document.body.querySelector('.order-count2');
+			order_count3 = document.body.querySelector('.order-count3');
+			order_count4 = document.body.querySelector('.order-count4');
 			getData();
 		})
 		mui('.mui-scroll-wrapper').scroll({
@@ -459,6 +477,7 @@
 		// 订单管理
 		function allOrders(data1){
 			table1.innerHTML = "";
+			order_count1.innerText = data1.length + '单';
 			mui.each(data1, function(index, item) {
 				var li = document.createElement('li');
 				li.orderId = item.id; /*订单id*/
@@ -529,14 +548,13 @@
 				}
 				var href = "tel:" + item.phone;
 				var address = "地址: " + item.address;
-				if (item.ship_man_id == null || item.ship_man_id == undefined || item.ship_man_id == "null" || item.ship_man_id == "") {
-					var sender = "(配送人:无)";
-				} else{
-					if (item.ship_man_id == null || item.ship_man_id == undefined || item.ship_man_id == "null" || item.ship_man_id == "") {
-					var sender = "(配送人:无)";
-				} else{
+				var peisongren = null;
+				if (item.ship_man_id == null || item.ship_man_id == undefined || item.ship_man_id == "null" || item.ship_man_id == "" || item.ship_man_id == '该区域没有配送人') {
+					var sender = "(配送人:" + '该区域没有配送人' + ")";
+					peisongren = '<span class="order-sender" style="color:red;">'+ sender + '</span></p></div>'
+				}else{
 					var sender = "(配送人:" + item.ship_man_id + ")";
-				}
+					peisongren = '<span class="order-sender">'+ sender + '</span></p></div>'
 				}
 				if (item.remark == "" || item.remark == null || item.remark == undefined) {
 					var mark = "备注: " + "无";
@@ -554,7 +572,7 @@
 				+ '<span class="customer-tel"' + 'data-tel="' + item.phone + '"' + 'data-name="' + item.receiver + '"><span class="mui-icon mui-icon-phone"></span>' + item.phone + '</span></p>'
 				+ '<p class="address"><span class="address-nav"' + 'data-address="' + item.address + '"></span>'
 	    			+ '<span class="order-address"><span class="mui-icon mui-icon-map"></span>' + address + '</span>'
-	    			+ '<span class="order-sender">'+ sender + '</span></p></div>'
+	    			+ peisongren
 	    			+ '<div class="order-mark">' + mark + '</div>'
 	    			+ '<div class="mui-checkbox line3">'
 				+ '<button class="button-goods" type="button"' + 'data-button-goods-id="' + item.id + '">' + "商品" + '</button>'
@@ -565,6 +583,7 @@
 		// 已完成
 		function doneOrders(data2){
 			table2.innerHTML = "";
+			order_count2.innerText = data2.length + '单';  
 			mui.each(data2, function(index, item) {
 				var li = document.createElement('li');
 				li.orderId = item.id; /*订单id*/
@@ -628,10 +647,13 @@
 				}
 				var href = "tel:" + item.phone;
 				var address = "地址: " + item.address;
-				if (item.ship_man_id == null || item.ship_man_id == undefined || item.ship_man_id == "null" || item.ship_man_id == "") {
-					var sender = "(配送人:无)";
-				} else{
+				var peisongren = null;
+				if (item.ship_man_id == null || item.ship_man_id == undefined || item.ship_man_id == "null" || item.ship_man_id == "" || item.ship_man_id == '该区域没有配送人') {
+					var sender = "(配送人:" + '该区域没有配送人' + ")";
+					peisongren = '<span class="order-sender" style="color:red;">'+ sender + '</span></p></div>'
+				}else{
 					var sender = "(配送人:" + item.ship_man_id + ")";
+					peisongren = '<span class="order-sender">'+ sender + '</span></p></div>'
 				}
 				if (item.remark == "" || item.remark == null || item.remark == undefined) {
 					var mark = "备注: " + "无";
@@ -649,7 +671,7 @@
 				+ '<span class="customer-tel"' + 'data-tel="' + item.phone + '"' + 'data-name="' + item.receiver + '"><span class="mui-icon mui-icon-phone"></span>' + item.phone + '</span></p>'
 				+ '<p class="address"><span class="address-nav"' + 'data-address="' + item.address + '"></span>'
 	    			+ '<span class="order-address"><span class="mui-icon mui-icon-map"></span>' + address + '</span>'
-	    			+ '<span class="order-sender">'+ sender + '</span></p></div>'
+	    			+ peisongren
 	    			+ '<div class="order-mark">' + mark + '</div>'
 	    			+ '<div class="mui-checkbox line3">'
 				+ '<button class="button-goods" type="button"' + 'data-button-goods-id="' + item.id + '">' + "商品" + '</button></div>';
@@ -659,6 +681,7 @@
 		// 已报错
 		function errorOrders(data3){
 			table3.innerHTML = "";
+			order_count3.innerText = data3.length + '单';
 			mui.each(data3, function(index, item) {
 				var li = document.createElement('li');
 				li.orderId = item.id; /*订单id*/
@@ -722,10 +745,13 @@
 				}
 				var href = "tel:" + item.phone;
 				var address = "地址: " + item.address;
-				if (item.ship_man_id == null || item.ship_man_id == undefined || item.ship_man_id == "null" || item.ship_man_id == "") {
-					var sender = "(配送人:无)";
-				} else{
+				var peisongren = null;
+				if (item.ship_man_id == null || item.ship_man_id == undefined || item.ship_man_id == "null" || item.ship_man_id == "" || item.ship_man_id == '该区域没有配送人') {
+					var sender = "(配送人:" + '该区域没有配送人' + ")";
+					peisongren = '<span class="order-sender" style="color:red;">'+ sender + '</span></p></div>'
+				}else{
 					var sender = "(配送人:" + item.ship_man_id + ")";
+					peisongren = '<span class="order-sender">'+ sender + '</span></p></div>'
 				}
 				if (item.remark == "" || item.remark == null || item.remark == undefined) {
 					var mark = "备注: " + "无";
@@ -749,7 +775,7 @@
 				+ '<span class="customer-tel"' + 'data-tel="' + item.phone + '"' + 'data-name="' + item.receiver + '"><span class="mui-icon mui-icon-phone"></span>' + item.phone + '</span></p>'
 				+ '<p class="address"><span class="address-nav"' + 'data-address="' + item.address + '"></span>'
 	    			+ '<span class="order-address"><span class="mui-icon mui-icon-map"></span>' + address + '</span>'
-	    			+ '<span class="order-sender">'+ sender + '</span></p></div>'
+	    			+ peisongren
 	    			+ '<div class="order-emark">' + error + '</div>'
 	    			+ '<div class="order-emark">' + mark + '</div>'
 	    			+ '<div class="mui-checkbox line3">'
@@ -758,8 +784,9 @@
 			});
 		}
 		// 明日订单
-		function tomorrowOrders(data4){
+		function tomorrowOrders(data4){  
 			table4.innerHTML = "";
+			order_count4.innerText = data4.length + '单';
 			mui.each(data4, function(index, item) {
 				var li = document.createElement('li');
 				li.orderId = item.id; /*订单id*/
@@ -830,10 +857,14 @@
 				}
 				var href = "tel:" + item.phone;
 				var address = "地址: " + item.address;
-				if (item.ship_man_id == null || item.ship_man_id == undefined || item.ship_man_id == "null" || item.ship_man_id == "") {
-					var sender = "(配送人:无)";
-				} else{
+				var peisongren = null;
+//				console.log(item.ship_man_id);
+				if (item.ship_man_id == null || item.ship_man_id == undefined || item.ship_man_id == "null" || item.ship_man_id == "" || item.ship_man_id == '该区域没有配送人') {
+					var sender = "(配送人:" + '该区域没有配送人' + ")";
+					peisongren = '<span class="order-sender" style="color:red;">'+ sender + '</span></p></div>'
+				}else{
 					var sender = "(配送人:" + item.ship_man_id + ")";
+					peisongren = '<span class="order-sender">'+ sender + '</span></p></div>'
 				}
 				if (item.remark == "" || item.remark == null || item.remark == undefined) {
 					var mark = "备注: " + "无";
@@ -851,7 +882,7 @@
 				+ '<span class="customer-tel"' + 'data-tel="' + item.phone + '"' + 'data-name="' + item.receiver + '"><span class="mui-icon mui-icon-phone"></span>' + item.phone + '</span></p>'
 				+ '<p class="address"><span class="address-nav"' + 'data-address="' + item.address + '"></span>'
 	    			+ '<span class="order-address"><span class="mui-icon mui-icon-map"></span>' + address + '</span>'
-	    			+ '<span class="order-sender">'+ sender + '</span></p></div>'
+	    			+ peisongren
 	    			+ '<div class="order-mark">' + mark + '</div>'
 	    			+ '<div class="mui-checkbox line3">'
 				+ '<button class="button-goods" type="button"' + 'data-button-goods-id="' + item.id + '">' + "商品" + '</button>'

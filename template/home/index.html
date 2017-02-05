@@ -1,4 +1,4 @@
-<!--<!doctype html>
+<!doctype html>
 <html>
 
 	<head>
@@ -13,10 +13,10 @@
 	</head>
 
 	<body>
-		<!--<header class="mui-bar mui-bar-nav jfbar">
+		<header class="mui-bar mui-bar-nav jfbar">
 			<h1 class="mui-title nav-title">功能</h1>
 			<a class="nav-right">原料</a>
-		</header>-->
+		</header>
 		<div class="mui-content">
 		</div>
 	</body>
@@ -24,9 +24,10 @@
 	<script type="text/javascript" src="../../js/system.js" ></script>
 	<script type="text/javascript"> 
 		mui.init({
-			gestureConfig:{
-				doubletap:true
-			}, 
+			keyEventBind: {
+				backbutton: false,  //Boolean(默认true)关闭back按键监听
+				menubutton: false   //Boolean(默认true)关闭menu按键监听
+			},
 			 subpages:[{
 				url:'homelist.html',
 				id:'homelist.html', 
@@ -77,4 +78,4 @@
 		
 		
 	</script>
-</html>-->
+</html>

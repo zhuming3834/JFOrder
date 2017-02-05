@@ -26,14 +26,18 @@
       "fonts/iconfont.css",
       "fonts/iconfont.ttf",
       "js/system.js",
-      "template/home/homelist.html"
+      "template/home/homelist.html",
+      "fonts/iconfont-guanli.ttf",
+      "fonts/iconfont-guanli.css"
     ],
     "refer": [
       "template/me/index.html",
       "template/home/index.html",
       "template/order/index.html",
       "template/login/login.html",
-      "template/home/homelist.html"
+      "template/home/homelist.html",
+      "login.html",
+      "template/admin/index.html"
     ]
   },
   "template/home/homelist.html": {
@@ -138,6 +142,36 @@
     ],
     "refer": [
       "index.html"
+    ]
+  },
+  "template/admin/index.html": {
+    "resources": [
+      "images/icon-nav.png",
+      "js/system.js",
+      "js/mui.min.js",
+      "css/app.css",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "css/homestyle.css",
+      "images/arr-up.png",
+      "js/mui.pullToRefresh.js",
+      "images/arr-down.png",
+      "images/icon-no.png"
+    ],
+    "refer": [
+      "template/home/goodslist.html",
+      "template/admin/popover.html",
+      "template/order/repolicy.html"
+    ]
+  },
+  "template/admin/popover.html": {
+    "resources": [
+      "js/system.js",
+      "js/mui.min.js",
+      "css/app.css",
+      "css/mui.min.css",
+      "css/homestyle.css",
+      "fonts/mui.ttf"
     ]
   }
 }

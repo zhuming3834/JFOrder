@@ -9,6 +9,7 @@
 		<title></title>
 		<link rel="stylesheet" href="css/mui.min.css" /> 
 		<link rel="stylesheet" href="fonts/iconfont.css" />
+		<link rel="stylesheet" href="fonts/iconfont-guanli.css" />
 	</head>
 	<style>
 		p{
@@ -25,14 +26,14 @@
 				<span class="mui-icon iconfont icon-dingdan"></span>
 				<span class="mui-tab-label">订单</span>
 			</a>
+			<a class="mui-tab-item" href="template/admin/index.html">
+				<span class="mui-icon iconfont icon-guanliyuan"></span> 
+				<span class="mui-tab-label">管理员</span>
+			</a>
 			<a class="mui-tab-item" href="template/me/index.html">
 				<span class="mui-icon iconfont icon-wode"></span> 
 				<span class="mui-tab-label">我的</span>
 			</a>
-			<!--<a class="mui-tab-item" href="template/login/login.html">
-				<span class="mui-icon iconfont icon-wode"></span>
-				<span class="mui-tab-label">我的</span>
-			</a>-->
 		</nav>
 	</body>
 	<script src="js/mui.min.js"></script>
@@ -40,7 +41,7 @@
 	<script type="text/javascript" charset="utf-8">
 		//mui初始化 
 		mui.init();
-		var subpages = ['template/home/homelist.html','template/order/index.html','template/me/index.html'];
+		var subpages = ['template/home/homelist.html','template/order/index.html','template/admin/index.html','template/me/index.html'];
 		var subpage_style = {
 			top: '0px',
 			bottom: '51px'
@@ -50,25 +51,38 @@
 		
 		 //创建子页面，首个选项卡页面显示，其它均隐藏；
 		mui.plusReady(function() {
-//			isLogin();
-			var osName = plus.os.name;
-			if (osName == "iOS") { // iOS端 才设置状态栏颜色
-				// 设置状态栏 颜色
-				plus.navigator.setStatusBarBackground("#007dFF");
-				// 设置状态栏 样式
-				plus.navigator.setStatusBarStyle('UIStatusBarStyleDefault');	
-			}
-			var self = plus.webview.currentWebview();
-			for (var i = 0; i < subpages.length; i++) {
-				var temp = {}; 
-				var sub = plus.webview.create(subpages[i], subpages[i], subpage_style);
-				if (i > 0) {
-					sub.hide();
-				}else{
-					temp[subpages[i]] = "true";
-					mui.extend(aniShow,temp);
+			if (isLogin() == true) {
+				var osName = plus.os.name;
+				if (osName == "iOS") { // iOS端 才设置状态栏颜色
+					// 设置状态栏 颜色
+					plus.navigator.setStatusBarBackground("#007dFF");
+					// 设置状态栏 样式
+					plus.navigator.setStatusBarStyle('UIStatusBarStyleDefault');	
 				}
-				self.append(sub);
+				var self = plus.webview.currentWebview();
+				for (var i = 0; i < subpages.length; i++) {
+					var temp = {}; 
+					var sub = plus.webview.create(subpages[i], subpages[i], subpage_style);
+					if (i > 0) {
+						sub.hide();
+					}else{
+						temp[subpages[i]] = "true";
+						mui.extend(aniShow,temp);
+					}
+					self.append(sub);
+				}
+			} else{
+				//显示启动导航
+				mui.openWindow({
+					id:'login',
+					url:'template/login/login.html',
+					show:{
+						aniShow:'none'
+					},
+					waiting:{
+						autoShow:false
+					}
+				});
 			}
 		});
 		 //当前激活选项
@@ -114,17 +128,9 @@
 		//			console.log(showGuide);
 		//  没登录就进入登录页面
 			if(showGuide == null || showGuide == undefined || showGuide == "false"){ 
-				//显示启动导航
-				mui.openWindow({
-					id:'login',
-					url:'template/login/login.html',
-					show:{
-						aniShow:'none'
-					},
-					waiting:{
-						autoShow:false
-					}
-				});
+				return false;
+			}else{
+				return true;
 			}
 		}
 			

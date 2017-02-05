@@ -90,7 +90,12 @@
 	<script type="text/javascript" src="../../js/system.js" ></script>
 	<script type="text/javascript" src="../../js/mui.picker.min.js" ></script>
 	<script type="text/javascript"> 
-		mui.init();
+		mui.init({
+			keyEventBind: {
+				backbutton: false,  //Boolean(默认true)关闭back按键监听
+				menubutton: false   //Boolean(默认true)关闭menu按键监听
+			}
+		});
 		mui('.mui-scroll-wrapper').scroll({
 			 scrollY: true, //是否竖向滚动
 			 scrollX: false, //是否横向滚动
@@ -185,30 +190,35 @@
 		//退出按钮点击事件
 		document.querySelector('.loginOut').addEventListener('tap', function(event) {
 			var btn = ["取消","确定"]; 
-			mui.confirm("确定退出登录!","",btn,function(e){
+			mui.confirm("确定退出应用!","",btn,function(e){
 				if(e.index == 1){
 					localStorage.setItem(IS_LOGIN, "false"); 
 					localStorage.removeItem(USER);
 					localStorage.removeItem(USER_NAME);
 					localStorage.removeItem(PASS_WORD);
-					isLogin(); // 退出登录后进入登录页面
+					localStorage.removeItem(IS_SUPER);
+					showData();
+					setTimeout(function() {
+						isLogin(); // 退出登录后进入登录页面
+					}, 150);
 				}
 			});
 		});
-		function isLogin() {
-			showData();
-			goHome();
-			//显示启动导航
-			mui.openWindow({
-				id:'login',
-				url:'../login/login.html',
-				show:{
-					aniShow:'none'
-				},
-				waiting:{
-					autoShow:false
-				}
-			});
+		function isLogin() {		
+			if(mui.os.ios){
+                mui.openWindow({
+					id:'login',
+					url:'../login/login.html',
+					show:{
+						aniShow:'none'
+					},
+					waiting:{
+						autoShow:false
+					}
+				});
+            } else {
+                plus.runtime.quit();
+            }
 		}
 		
 		document.querySelector('.nav-right').addEventListener('tap',function(){

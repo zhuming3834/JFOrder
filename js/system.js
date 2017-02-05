@@ -1,11 +1,14 @@
 /*
  * 网络请求相关的配置
- */
+ * 18672340812  612820
+ * 2742668612
+ */ 
 // 测试服务器
 //var BASE_URL = "http://192.168.65.78:8000/webapp/api/v1/";
 // 正式服务器
 var BASE_URL = "http://g.justfruit.cn/webapp/api/v1/"
-//var BASE_URL = "../../json/";
+//var BASE_URL = "../../json/"; 
+// http://g.justfruit.cn/webapp/api/v1/print_order_ticket
 // 登录接口 username=baiyang01&pw=123456
 var LOGIN = "login";
 // 商品列表 order_id=00000004
@@ -22,6 +25,8 @@ var MERGER_MATERIALS = "merger_materials"
 var PRINT_ORDER_TICKET = "print_order_ticket";
 // 个人结算
 var PAYMENT_STATUS = "payment_status";
+// 超级管理员
+var SUPERMAN = "superman";
 
 // 本地存储的key
 
@@ -32,6 +37,8 @@ var IS_LOGIN = "isLogin";
 var USER_NAME = "username";
 // 输入的密码
 var PASS_WORD = "password";
+// 是否是管理员  true：是 false:不是
+var IS_SUPER = "is_super";
 
 // 登录用户的用户信息
 var USER = "user";  
