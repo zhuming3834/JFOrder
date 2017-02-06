@@ -58,7 +58,7 @@
 		</header>
 		<div id="pullrefresh" class="mui-content mui-scroll-wrapper">
 			<!--<div class="no-right">抱歉，您没有权限查看~</div>-->
-			<div class="mui-scroll" style="display: none;">
+			<div class="mui-scroll">
 				<span class="order-count">0单</span>
 				<ul class="mui-table-view">
 				</ul>
@@ -149,10 +149,10 @@
             });
 			
 			var isSuper = localStorage.getItem(IS_SUPER);
-			console.log(isSuper + "---isSuper");
-			if (isSuper) {
+//			console.log(isSuper + "---isSuper");
+			if (isSuper == "true") {
 				// 进来显示登录缓存的数据
-				refreshData();
+				refreshData();  
 			} else{
 				pullrefresh.innerHTML = '<div class="no-right">抱歉，您没有权限查看~</div>';
 				updown.removeAttribute('class');
@@ -174,7 +174,7 @@
 			updown.className = 'arrow-down';
 			flag = false;
 		});
-		
+		// 配送师傅
 		function myList(emid){
 			mui.ajax(BASE_URL + SUPERMAN,{
 				data: {
@@ -213,6 +213,7 @@
 		
 		// 刷新数据
 		function refreshData(){
+//			console.log(BASE_URL + SUPERMAN);
 			mui.ajax(BASE_URL + SUPERMAN,{
 				data: {
 					format: 'json'
@@ -254,6 +255,7 @@
 				var li = document.createElement('li');
 				li.orderId = item.id; /*订单id*/
 				var time = item.ship_time.split("T")[0];
+				time = addDate(time);
 				li.className = 'mui-table-view-cell mui-collapse-content'; 
 				var sendStatus = null; 
 				var sigeButton = null;
@@ -313,7 +315,6 @@
 				} else{
 					var mark = "备注: " + item.remark;
 				}
-				
 				li.innerHTML = '<div class="line1">'
 	    			+ '<span class="order-time">' + time + '</span>'
 	    			+ '<span class="order-pay">' + payType + "￥" + item.price + '</span>'
@@ -348,6 +349,7 @@
 //				console.log('---- ' + item.id);
 				li.orderId = item.id; /*订单id*/
 				var time = item.ship_time.split("T")[0];
+				time = addDate(time);
 				li.className = 'mui-table-view-cell mui-collapse-content'; 
 				var sendStatus = null; 
 				var sigeButton = null;

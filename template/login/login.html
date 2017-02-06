@@ -42,7 +42,9 @@
 		});
 		var userid = null;   // 用户名
 		var pasword = null; // 密码
+		var self = null;
 		mui.plusReady(function(){
+			self = plus.webview.currentWebview();
 			plus.navigator.closeSplashscreen();
 			//读取本地存储，检查是否登录
 			var showGuide = localStorage.getItem(IS_LOGIN);
@@ -139,6 +141,7 @@
 					autoShow:false
 				}
 			});
+//			self.hide();
 		}
 		
 		// http://localhost:3000/login?username=hgdqstudio&password=123456

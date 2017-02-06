@@ -250,6 +250,7 @@
 				var li = document.createElement('li');
 				li.orderId = item.id; /*订单id*/
 				var time = item.ship_time.split("T")[0];
+				time = addDate(time);
 				li.className = 'mui-table-view-cell mui-collapse-content'; 
 				var sendStatus = null; 
 				var sigeButton = null;
