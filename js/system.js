@@ -57,6 +57,10 @@ var EMPLOYEES = "employees";
 var ORDERS = "orders";
 // 选中的订单数据集合
 var ORDER_LIST = "oreder_list";
+// 管理员-员工列表
+var EMPLOYEES_NEW = "employees_new";
+// 管理员-全部订单
+var TOTAL_NUM = "total_num";
 
 // 服务器返回数据类型
 var DATA_TYPE = "json";

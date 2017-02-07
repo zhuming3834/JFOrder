@@ -103,6 +103,14 @@
 	background-size: 40px 40px;*/
 	position: relative;
 }
+.address2{
+	padding: 8px;
+	/*background-image: url(../images/icon-nav.png);
+	background-position: right center; 
+	background-repeat: no-repeat;
+	background-size: 40px 40px;*/
+	position: relative;
+}
 .address-nav{
 	width: 40px;
 	height: 40px;

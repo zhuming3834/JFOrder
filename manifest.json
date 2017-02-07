@@ -7,7 +7,7 @@
 	"id": "cn.justfruit.order",/*应用的标识，创建应用时自动生成，勿手动修改*/
 	"name": "吉客订单",/*应用名称，程序桌面图标名称*/
 	"version": {
-		"name": "1.0.2",/*应用版本名称*/
+		"name": "1.0.5",/*应用版本名称*/
 		"code": "83"
 	},
 	"description": "吉客订单",/*应用描述信息*/
@@ -148,11 +148,11 @@
 					}
 				},
 				"android": {
-					"mdpi": "images/48.png", /*普通屏程序图标，分辨率：48x48*/
-					"ldpi": "images/48.png", /*大屏程序图标，分辨率：48x48*/
-					"hdpi": "images/72.png", /*高分屏程序图标，分辨率：72x72*/
-					"xhdpi": "images/96.png",/*720P高分屏程序图标，分辨率：96x96*/
-					"xxhdpi": "images/144.png"
+					"mdpi": "unpackage/res/icons/48x48.png", /*普通屏程序图标，分辨率：48x48*/
+					"ldpi": "unpackage/res/icons/48x48.png", /*大屏程序图标，分辨率：48x48*/
+					"hdpi": "unpackage/res/icons/72x72.png", /*高分屏程序图标，分辨率：72x72*/
+					"xhdpi": "unpackage/res/icons/96x96.png",/*720P高分屏程序图标，分辨率：96x96*/
+					"xxhdpi": "unpackage/res/icons/144x144.png"
 				}
 			},
 			"splashscreen": {

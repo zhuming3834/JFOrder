@@ -121,6 +121,7 @@
 		});
 		var table = null;
 		var self = null;
+		var name = null;
 		// 选中的送货人的ID
 		var employeeId = null;
 		mui.plusReady(function(){
@@ -141,6 +142,8 @@
 					area = item.building.name;
 				}
 				li.orderId = item.id; /*目标送货人的id*/
+				li.name = item.name;
+//				console.log(item.name);
 				if (index%2 == 0) {
 					li.className = 'tableView-cell mui-input-row mui-radio mui-left'; 
 				} else{
@@ -148,7 +151,7 @@
 				}
 				li.innerHTML = '<span class="list-common-style">' + item.name + '</span>'
 				+ '<span class="list-common-style">' + area + '</span>'
-				+ '<input name="radio1" type="radio"' + 'data-employee-id="' + item.id + '">';
+				+ '<input name="radio1" type="radio"' + 'data-employee-id="' + item.id  + '"' + 'data-employee-name="' + item.name + '">';
 				table.appendChild(li, table.firstChild);
 			})
 		}
@@ -156,7 +159,25 @@
 		// 左边 radio 点击事件
 		mui('.mui-content').on('change', 'input', function(){
 			employeeId = this.getAttribute('data-employee-id');
-			console.log("**" + employeeId);
+			name = this.getAttribute('data-employee-name');
+			console.log("**" + employeeId + name + self.listID);
+			// 测试用的 不要打开
+//			var admin = plus.webview.getWebviewById('template/admin/index.html');
+//			mui.fire(admin,'fendan',{
+//		    		orderID: self.listID,
+//		    		name: name,
+//		    		employeeId: employeeId
+//		    });
+//		    
+//		    var order = plus.webview.getWebviewById('template/order/index.html');
+//			mui.fire(order,'order-fendan',{
+//		    		orderID: self.listID,
+//		    		name: name,
+//		    		employeeId: employeeId
+//		   });		
+//		   setTimeout(function(){
+//		        mui.back();
+//		    		},1000);
 		})
 		// 确定按钮点击事件
 		document.querySelector('.nav-right').addEventListener('tap',function(){
@@ -185,9 +206,22 @@
 						plus.nativeUI.closeWaiting();
 						if (data.status == 100) {
 							mui.toast(data.msg);
+							var admin = plus.webview.getWebviewById('template/admin/index.html');
+							mui.fire(admin,'fendan',{
+						    		orderID: self.listID,
+						    		name: name,
+						    		employeeId: employeeId
+						    });
+		    
+						    var order = plus.webview.getWebviewById('template/order/index.html');
+							mui.fire(order,'order-fendan',{
+						    		orderID: self.listID,
+						    		name: name,
+						    		employeeId: employeeId
+						    });
 							setTimeout(function(){
 						        mui.back();
-						    },1200);
+						    },1000);
 						}else{ 
 							mui.toast(data.status + data.msg);
 						}

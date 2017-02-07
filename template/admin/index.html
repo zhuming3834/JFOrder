@@ -112,12 +112,14 @@
 		var title_nav = null;
 		var pullrefresh = null;
 		var t = null;
+		var userId = 'super';
 		/**
 		 * 下拉刷新具体业务实现
 		 */
 		function pulldownRefresh() {
 			setTimeout(function() {
-				refreshData();
+				console.log(' === ++ ' + userId);
+				myList(userId);
 				mui('#pullrefresh').pullRefresh().endPulldownToRefresh(); //refresh completed
 			}, 1500);
 		}
@@ -142,6 +144,7 @@
 			updown = document.querySelector('#updown');
 			title_nav = document.querySelector('#title-nav');
 			t = document.querySelector('.nav-title');
+			userId = 'super';
 			floatw = plus.webview.create("popover.html", "popover", {
                 background: 'transparent',
                 zindex: 10,
@@ -152,7 +155,7 @@
 //			console.log(isSuper + "---isSuper");
 			if (isSuper == "true") {
 				// 进来显示登录缓存的数据
-				refreshData();  
+				myList(userId);
 			} else{
 				pullrefresh.innerHTML = '<div class="no-right">抱歉，您没有权限查看~</div>';
 				updown.removeAttribute('class');
@@ -165,10 +168,12 @@
 		    var employeeId = event.detail.employeeId;
 		    var name = null;
 			if (employeeId == "管理员") {
-				refreshData();
+				userId = "super";
+				myList(userId);
 				title_nav.innerText = "全部";
 			} else{
-				myList(employeeId);
+				userId = employeeId;
+				myList(userId);
 				title_nav.innerText = event.detail.name;
 			}
 			updown.className = 'arrow-down';
@@ -190,15 +195,21 @@
 				success: function(data){ 
 					plus.nativeUI.closeWaiting();
 					if (data.status == 100) {
+						localStorage.setItem(EMPLOYEES_NEW,JSON.stringify(data.employees));
+						localStorage.setItem(TOTAL_NUM,data.total_num);
 						if (data.order.length == 0) {
 							table.innerHTML = "";
 							order_count.innerText = '0单';
 							mui.toast("暂时没有订单~");
 						}else{
-							order_count.innerText = data.order.length + '单';
+							if (userId == "super") {
+								order_count.innerHTML = '已分配' + '&nbsp;&nbsp;' + data.has_shipman_num + '/' + data.total_num + '单';
+							} else{
+								order_count.innerHTML = data.order.length + '单';
+							}
 							analyData(data.order);
 							mui.toast("操作成功");
-						}
+						} 
 					}else{ 
 						mui.toast(data.status);
 					}
@@ -209,43 +220,6 @@
 				}
 			});
 		}
-		
-		
-		// 刷新数据
-		function refreshData(){
-//			console.log(BASE_URL + SUPERMAN);
-			mui.ajax(BASE_URL + SUPERMAN,{
-				data: {
-					format: 'json'
-				},
-				dataType: DATA_TYPE,
-				type: REQUEST_TYPE,  
-				timeout: TIME_OUT,   
-				beforeSend: function(data) {
-					plus.nativeUI.showWaiting();
-				},
-				success: function(data){ 
-					plus.nativeUI.closeWaiting();
-					if (data.status == 100) {
-						if (data.order.length == 0) {
-							table.innerHTML = "";
-							order_count.innerText = '0单';
-							mui.toast("暂时没有订单~");
-						}else{
-							order_count.innerText = '已分配' + data.has_shipman_num + '/' + data.total_num + '单';
-							analyData(data.order);
-							mui.toast("操作成功");
-						}
-					}else{ 
-						mui.toast(data.status);
-					}
-				},
-				error: function(xhr, type, errerThrown){
-					mui.toast(NET_ERROR);
-					plus.nativeUI.closeWaiting();
-				}
-			});
-		};
 		// 数据解析
 		function analyData(orData){
 			table.innerHTML = "";
@@ -305,10 +279,10 @@
 				var peisongren = null;
 				if (item.ship_man_id == null || item.ship_man_id == undefined || item.ship_man_id == "null" || item.ship_man_id == "" || item.ship_man_id == '该区域没有配送人') {
 					var sender = "(配送人:" + '该区域没有配送人' + ")";
-					peisongren = '<span class="order-sender" style="color:red;">'+ sender + '</span></p></div>'
+					peisongren = '<span class="order-sender" style="color:red;"' + 'data-order-id="' + item.id  + '">'+ sender + '</span></p></div>'
 				}else{
 					var sender = "(配送人:" + item.ship_man_id + ")";
-					peisongren = '<span class="order-sender">'+ sender + '</span></p></div>'
+					peisongren = '<span class="order-sender"' + 'data-order-id="' + item.id  + '">'+ sender + '</span></p></div>'
 				}
 				if (item.remark == "" || item.remark == null || item.remark == undefined) {
 					var mark = "备注: " + "无";
@@ -323,7 +297,9 @@
 	    			+ '<p class="about-order">'
 	    			+ '<span class="customer-name"><span class="mui-icon mui-icon-person"></span>' + item.receiver + '</span>'
 	    			+ '<span class="customer-tel"' + 'data-tel="' + item.phone + '"' + 'data-name="' + item.receiver + '"><span class="mui-icon mui-icon-phone"></span>' + item.phone + '</span></p>'
-	    			+ '<p class="address"><span class="address-nav"' + 'data-address="' + item.address + '"></span>'
+	    			+ '<p class="address2">'
+	    			// 2017.02.07 去掉 导航功能
+	    			// '<p class="address"><span class="address-nav"' + 'data-address="' + item.address + '"></span>'
 	    			+ '<span class="order-address"><span class="mui-icon mui-icon-map"></span>' + address + '</span>'
 	    			+ peisongren
 	    			+ '<div class="order-mark">' + mark + '</div>'
@@ -399,10 +375,10 @@
 				var peisongren = null;
 				if (item.ship_man_id == null || item.ship_man_id == undefined || item.ship_man_id == "null" || item.ship_man_id == "" || item.ship_man_id == '该区域没有配送人') {
 					var sender = "(配送人:" + '该区域没有配送人' + ")";
-					peisongren = '<span class="order-sender" style="color:red;">'+ sender + '</span></p></div>'
+					peisongren = '<span class="order-sender" style="color:red;"' + 'data-order-id="' + item.id  + '">'+ sender + '</span></p></div>'
 				}else{
 					var sender = "(配送人:" + item.ship_man_id + ")";
-					peisongren = '<span class="order-sender">'+ sender + '</span></p></div>'
+					peisongren = '<span class="order-sender"' + 'data-order-id="' + item.id  + '">'+ sender + '</span></p></div>'
 				}
 				if (item.remark == "" || item.remark == null || item.remark == undefined) {
 					var mark = "备注: " + "无";
@@ -569,6 +545,32 @@
 //          localStorage.setItem(ORDER_LIST,dataStr);
         }
         
+        window.addEventListener('fendan',function(event){
+		    //获得事件参数
+		    var employeeId = event.detail.employeeId;
+		    var name = event.detail.name;
+		    var orderID = event.detail.orderID;
+		    console.log('+++++ --- '+ employeeId + name + orderID);
+			var senders = document.getElementsByClassName('order-sender');
+			var len = senders.length;
+			console.log('len '+ len);
+			if (len >= 1) {
+				for (var i = 0; i < len;i ++) {
+					var itemId = senders[i].getAttribute('data-order-id');
+					if (itemId == orderID) {
+						var oldData = senders[i].innerHTML;
+						if (oldData == '(配送人:该区域没有配送人)') {
+							senders[i].removeAttribute('style');
+						}
+						console.log('old = ' + oldData);
+						senders[i].innerHTML = '(配送人:' + name + ')';
+						console.log('new = ' + senders[i].innerHTML);
+					}
+				}
+			}
+		});
+        
+        
         // 数据处理
         function makeData(dice){
             var result = '';
@@ -633,7 +635,7 @@
 					if (data.status == 100) {
 //						mui.toast(data.msg);
 						setTimeout(function(){
-					        refreshData();
+							myList(userId);
 					    },100);
 					}else{ 
 						mui.toast(data.status + data.msg);

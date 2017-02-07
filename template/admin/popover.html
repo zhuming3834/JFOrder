@@ -47,6 +47,10 @@
 				left: 10%;
 				background-color: white;
 			}
+			.count{
+				float: right;
+				padding-right: 80px;
+			}
 		</style>
 	</head>
 
@@ -55,7 +59,7 @@
 			<div class="mui-scroll"> 
 				<ul class="mui-table-view" id="popview">
 					<li class="tableView-cell">
-						<span class="list-common-style">全部</span>
+						<span class="list-common-style">全部<span class="count" id="allCount">0单</span></span>
 					</li>
 				</ul>
 			</div>
@@ -85,13 +89,15 @@
 			self = plus.webview.currentWebview();
 			height = plus.screen.resolutionHeight - 44;
 			body.style.height = height + 'px';
+			var total = localStorage.getItem(TOTAL_NUM);
+			document.getElementById('allCount').innerText = total + '单';
 			showList();
 		})
 		document.querySelector('body').addEventListener('tap',function(){
 			self.hide('fade-out');
 		})
 		function showList(){
-			var employees = JSON.parse(localStorage.getItem(EMPLOYEES));
+			var employees = JSON.parse(localStorage.getItem(EMPLOYEES_NEW));
 //			table.innerHTML = '';
 			mui.each(employees,function(index, item){
 				var li = document.createElement('li');
@@ -102,7 +108,7 @@
 				} else{
 					li.className = 'tableView-cell';  
 				}
-				li.innerHTML = '<span class="list-common-style">' + item.name + '</span>'
+				li.innerHTML = '<span class="list-common-style">' + item.name + '<span class="count">' + item.order_count + '单' +'</span></span>';
 				table.appendChild(li, table.firstChild);
 			})
 		}

@@ -82,6 +82,7 @@
 					 <div class="icon-money">我的提成</div>
 					 <div class="money" id="allmoney"></div> 
 				</div> 
+				<div class="version"></div>
 				<button class="loginOut" type="button">退出</button>
 			</div>
 		</div>
@@ -146,6 +147,12 @@
 			heji2 = document.getElementById('heji2');
 			
 			allmoney = document.getElementById('allmoney');
+			// 显示版本号
+			plus.runtime.getProperty(plus.runtime.appid,function(inf){
+		        wgtVer=inf.version;
+		        document.querySelector('.version').innerHTML = '应用版本：V' + wgtVer;
+		        console.log("当前应用版本："+wgtVer);
+		   });
 		})
 		function showData(flag){
 			if (flag == 1) {
