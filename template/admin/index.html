@@ -179,8 +179,12 @@
 			updown.className = 'arrow-down';
 			flag = false;
 		});
+		window.addEventListener('reload',function(event){
+		   plus.webview.currentWebview().reload();
+		});
 		// 配送师傅
 		function myList(emid){
+			console.log( BASE_URL + SUPERMAN + "/?format=json&employee_id=" + emid);
 			mui.ajax(BASE_URL + SUPERMAN,{
 				data: {
 					format: 'json',
@@ -195,6 +199,9 @@
 				success: function(data){ 
 					plus.nativeUI.closeWaiting();
 					if (data.status == 100) {
+						console.log(data.total_num);
+						var popover = plus.webview.getWebviewById('popover');
+						mui.fire(popover,'shuxin',{});
 						localStorage.setItem(EMPLOYEES_NEW,JSON.stringify(data.employees));
 						localStorage.setItem(TOTAL_NUM,data.total_num);
 						if (data.order.length == 0) {
@@ -394,7 +401,7 @@
 	    			+ '<p class="about-order">'
 	    			+ '<span class="customer-name"><span class="mui-icon mui-icon-person"></span>' + item.receiver + '</span>'
 	    			+ '<span class="customer-tel"' + 'data-tel="' + item.phone + '"' + 'data-name="' + item.receiver + '"><span class="mui-icon mui-icon-phone"></span>' + item.phone + '</span></p>'
-	    			+ '<p class="address"><span class="address-nav"' + 'data-address="' + item.address + '"></span>'
+//	    			+ '<p class="address"><span class="address-nav"' + 'data-address="' + item.address + '"></span>'
 	    			+ '<span class="order-address"><span class="mui-icon mui-icon-map"></span>' + address + '</span>'
 	    			+ peisongren
 	    			+ '<div class="order-mark">' + mark + '</div>'

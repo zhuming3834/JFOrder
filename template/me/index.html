@@ -29,17 +29,22 @@
 				</div>
 				<div class="area2">
 					<div class="area2-item">
-						<span class="area2-item-left"><span class="mui-icon mui-icon-location-filled"></span>区域</span>
+						<span class="area2-item-left">区域</span>
 						<span class="area2-item-right" id="map"></span></span>
 						<div class="line"></div>
 					</div>  
 					<div class="area2-item">
-						<span class="area2-item-left"><span class="mui-icon mui-icon-person-filled"></span>姓名</span>
+						<!-- 
+							<span class="mui-icon mui-icon-person-filled"></span>
+							<span class="mui-icon mui-icon-phone-filled"></span>
+							<span class="mui-icon mui-icon-location-filled"></span>
+						-->
+						<span class="area2-item-left">姓名</span>
 						<span class="area2-item-right" id="name"></span></span>
 						<div class="line"></div>
 					</div>  
 					<div class="area2-item">
-						<span class="area2-item-left"><span class="mui-icon mui-icon-phone-filled"></span>电话</span>
+						<span class="area2-item-left">电话</span>
 						<span class="area2-item-right" id="tel"></span></span>
 						<!--<div class="line"></div>-->
 					</div>  
@@ -154,6 +159,9 @@
 		        console.log("当前应用版本："+wgtVer);
 		   });
 		})
+		window.addEventListener('reload',function(event){
+		   plus.webview.currentWebview().reload();
+		});
 		function showData(flag){
 			if (flag == 1) {
 				var user = JSON.parse(localStorage.getItem(USER));
@@ -213,16 +221,7 @@
 		});
 		function isLogin() {		
 			if(mui.os.ios){
-                mui.openWindow({
-					id:'login',
-					url:'../login/login.html',
-					show:{
-						aniShow:'none'
-					},
-					waiting:{
-						autoShow:false
-					}
-				});
+				alert("请按home键结束应用后重新开启");
             } else {
                 plus.runtime.quit();
             }

@@ -214,7 +214,9 @@
 					"js/system.js",
 					"template/home/homelist.html",
 					"fonts/iconfont-guanli.ttf",
-					"fonts/iconfont-guanli.css"
+					"fonts/iconfont-guanli.css",
+					"css/mestyle.css",
+					"css/app.css"
 				],
 				"refer": [
 					"template/me/index.html",

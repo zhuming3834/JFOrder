@@ -142,25 +142,5 @@
 				}
 			});
 		}
-		
-		// http://localhost:3000/login?username=hgdqstudio&password=123456
-		function loginRequest2(){
-			console.log('11133');
-			mui.ajax("http://127.0.0.1:3000/login",{
-				data: {
-					username: 'hgdqstudio',
-					'password': 123456
-				},
-				dataType: 'json',
-				type: 'post',  
-				timeout: 10000,   
-				success: function(data){ 
-					console.log(data.msg);
-				},
-				error: function(xhr, type, errerThrown){
-					
-				}
-			});
-		};
 	</script>
 </html>

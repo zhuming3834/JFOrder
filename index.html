@@ -10,6 +10,8 @@
 		<link rel="stylesheet" href="css/mui.min.css" /> 
 		<link rel="stylesheet" href="fonts/iconfont.css" />
 		<link rel="stylesheet" href="fonts/iconfont-guanli.css" />
+		<link rel="stylesheet" href="css/app.css" />
+		<link rel="stylesheet" href="css/mestyle.css" />
 	</head>
 	<style>
 		p{ 
@@ -17,7 +19,27 @@
 		}
 	</style>
 	<body>
-		<nav class="mui-bar mui-bar-tab">
+		
+		<header class="mui-bar mui-bar-nav jfbar" id="login-nav">
+			<h1 class="mui-title nav-title">登录</h1>   
+		</header> 
+		<div class="mui-content" id="login-content" style="height: 300px;">
+			<div class="input-area">
+				<div class="mui-input-row">
+					<label><span class="mui-icon mui-icon-person-filled"></span>账号</label>
+					<input id="userid" type="text" class="mui-input-clear" placeholder="请输入账号" />
+				</div>
+				<div class="line"></div>
+				<div class="mui-input-row">
+					<label><span class="mui-icon mui-icon-locked"></span>密码</label>
+					<input id="pw" type="password" class="mui-input-password" placeholder="请输入密码" />
+				</div>
+			</div>
+			<button id="login" type="button" class="login-btn">登录</button>
+		</div>
+		
+		
+		<nav class="mui-bar mui-bar-tab" id="page">
 			<a id="defaultTab" class="mui-tab-item mui-active" href="template/home/homelist.html">
 				<span class="mui-icon iconfont icon-gongneng"></span>
 				<span class="mui-tab-label">首页</span>
@@ -48,43 +70,59 @@
 		};
 		
 		var aniShow = {};
-		
+		var login_nav = null;
+		var login_content = null;
+		var page = null;
+		var userid = null;   // 用户名
+		var pasword = null; // 密码
+		var self = null;
 		 //创建子页面，首个选项卡页面显示，其它均隐藏；
 		mui.plusReady(function() {
+			self = plus.webview.currentWebview();
+			plus.navigator.closeSplashscreen();
+			login_nav = document.getElementById('login-nav');
+			login_content = document.getElementById("login-content");
+			page = document.getElementById("page");
+			login_nav.style.display = 'none';
+			login_content.style.display = 'none';
+			page.style.display = 'none';
+			userid = document.getElementById('userid');
+			pasword = document.getElementById('pw');
+			
+			var osName = plus.os.name;
+			if (osName == "iOS") { // iOS端 才设置状态栏颜色
+				// 设置状态栏 颜色
+				plus.navigator.setStatusBarBackground("#007dFF");
+				// 设置状态栏 样式
+				plus.navigator.setStatusBarStyle('UIStatusBarStyleDefault');	
+			}
+			
 			if (isLogin() == true) {
-				var osName = plus.os.name;
-				if (osName == "iOS") { // iOS端 才设置状态栏颜色
-					// 设置状态栏 颜色
-					plus.navigator.setStatusBarBackground("#007dFF");
-					// 设置状态栏 样式
-					plus.navigator.setStatusBarStyle('UIStatusBarStyleDefault');	
-				}
-				var self = plus.webview.currentWebview();
-				for (var i = 0; i < subpages.length; i++) {
-					var temp = {}; 
-					var sub = plus.webview.create(subpages[i], subpages[i], subpage_style);
-					if (i > 0) {
-						sub.hide();
-					}else{
-						temp[subpages[i]] = "true";
-						mui.extend(aniShow,temp);
-					}
-					self.append(sub);
-				}
+				login_nav.style.display = 'none';
+				login_content.style.display = 'none';
+				page.style.display = 'block';
+				initSunPage();
 			} else{
-				//显示启动导航
-				mui.openWindow({
-					id:'login',
-					url:'template/login/login.html',
-					show:{
-						aniShow:'none'
-					},
-					waiting:{
-						autoShow:false
-					}
-				});
+				login_nav.style.display = 'block';
+				login_content.style.display = 'block';
+				page.style.display = 'none';
 			}
 		});
+		
+		function initSunPage(){
+			for (var i = 0; i < subpages.length; i++) {
+				var temp = {}; 
+				var sub = plus.webview.create(subpages[i], subpages[i], subpage_style);
+				if (i > 0) {
+					sub.hide();
+				}else{
+					temp[subpages[i]] = "true";
+					mui.extend(aniShow,temp);
+				}
+				self.append(sub);
+			}
+		}
+		
 		 //当前激活选项
 		var activeTab = subpages[0];
 		var title = document.getElementById("title");
@@ -125,13 +163,94 @@
 		function isLogin() {
 		//读取本地存储，检查是否登录
 			var showGuide = localStorage.getItem(IS_LOGIN);
-		//			console.log(showGuide);
 		//  没登录就进入登录页面
 			if(showGuide == null || showGuide == undefined || showGuide == "false"){ 
 				return false;
 			}else{
 				return true;
 			}
+		}
+				// 检查输入字符是否正确
+		function inputCheck(inputObject) {  
+			 var inputexp  = /^[\s]*$/;  
+			 if (inputexp.test(inputObject.value)){  
+			 	  inputObject.value = "";
+			      return false;  // 输入全空格
+			 }else{
+			 	return true;   
+			 }
+		 }
+		//登录按钮点击事件
+		document.getElementById("login").addEventListener('tap', function(event) {
+			console.log("登录");
+//			loginRequest2();
+			// 校验用户名
+			if (userid.value.length == 0 || inputCheck(userid) == false) {
+				mui.toast(USERNAME_EMPTY);
+				return;
+			}
+			// 校验密码
+			if (pasword.value.length == 0 || inputCheck(pasword) == false) {
+				mui.toast(PASSWORD_EMPTY);
+				return;
+			}
+			loginRequest();
+		});
+		function loginRequest(){
+			mui.ajax(BASE_URL + LOGIN,{
+				data: {
+					username: userid.value,
+					pw: pasword.value,
+					format: 'json'
+				},
+				dataType: DATA_TYPE,
+				type: REQUEST_TYPE,  
+				timeout: TIME_OUT,   
+				beforeSend: function(data) {
+					plus.nativeUI.showWaiting(LOGIN_ING);
+				},
+				success: function(data){ 
+					plus.nativeUI.closeWaiting();
+					if (data.status == 100) {
+						mui.toast(LOGIN_SUCCESS);
+						// 存储输入的用户账号和密码
+						localStorage.setItem(USER_NAME,userid.value);
+						localStorage.setItem(PASS_WORD,pasword.value);
+						localStorage.setItem(IS_SUPER,data.is_super)
+						// 设置登录状态  退出登录时设置为 false
+						localStorage.setItem(IS_LOGIN,"true");
+						// 存储登录用户信息
+						localStorage.setItem(USER,JSON.stringify(data.user));
+						// 存储员工列表
+						localStorage.setItem(EMPLOYEES,JSON.stringify(data.employees));
+						// 存储订单列表
+						localStorage.setItem(ORDERS,JSON.stringify(data.orders));	
+						setTimeout(function(){
+							openIndex();
+						},500);
+					}else{
+						mui.toast(data.msg);
+					}
+				},
+				error: function(xhr, type, errerThrown){
+					mui.toast(NET_ERROR);
+					plus.nativeUI.closeWaiting();
+				}
+			});
+		};
+		function openIndex(){
+			login_nav.style.display = 'none';
+			login_content.style.display = 'none';
+			page.style.display = 'block';
+			self.reload();
+			initSunPage();
+//			var two = plus.webview.getWebviewById('template/order/index.html');
+//			var three = plus.webview.getWebviewById('template/admin/index.html');
+//			var four = plus.webview.getWebviewById('template/me/index.html');
+//
+//			mui.fire(two,'reload',{});
+//		    mui.fire(three,'reload',{});
+//		    mui.fire(four,'reload',{});	
 		}
 			
 	</script>

@@ -95,9 +95,31 @@ function goHome(){
 	var views = plus.webview.all();
 	mui.each(views, function(index, view) {
 		if (view != plus.webview.getLaunchWebview()) {
-			if (view.id != 'template/index/homelist.html' && view.id != 'template/order/index.html' && view.id != 'template/me/index.html') {
+			if (view.id != 'template/home/homelist.html' && view.id != 'template/order/index.html' && view.id != 'template/admin/index.html' && view.id != 'template/me/index.html') {
 				view.close();
 			}
+		}
+	});
+}
+//返回到首页
+function toHomePage() {
+	console.log("返回到首页......");
+	var allPage = plus.webview.all();
+	console.log("plus.webview 是空的？");
+	for (var i = 0; i < allPage.length; i++) {
+//		plus.webview.hide(allPage[i]);
+		if (allPage[i] != plus.webview.getLaunchWebview()) {
+			plus.webview.close(allPage[i]);
+		}
+		console.log("3--关闭页面：" + allPage[i].getURL());
+	}
+	//返回首页
+	mui.openWindow({
+		url: "/index.html",
+		id: "index.html",
+		waiting: {
+			autoShow: true,
+			title: "回首页..."
 		}
 	});
 }

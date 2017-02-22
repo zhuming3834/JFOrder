@@ -64,6 +64,7 @@
 				</ul>
 			</div>
 		</div>
+		
 	</body>
 	<script src="../../js/mui.min.js"></script>
 	<script type="text/javascript" src="../../js/system.js" ></script>
@@ -84,6 +85,7 @@
 		var table = null;
 		var self = null;
 		mui.plusReady(function(){
+//			alert('222popview');
 			body = document.querySelector('body');
 			table = document.querySelector('#popview');
 			self = plus.webview.currentWebview();
@@ -93,6 +95,11 @@
 			document.getElementById('allCount').innerText = total + '单';
 			showList();
 		})
+		window.addEventListener('shuxin',function(event){
+		    var total = localStorage.getItem(TOTAL_NUM);
+			document.getElementById('allCount').innerText = total + '单';
+			showList();
+		});
 		document.querySelector('body').addEventListener('tap',function(){
 			self.hide('fade-out');
 		})

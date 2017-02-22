@@ -432,6 +432,9 @@
 			order_count4 = document.body.querySelector('.order-count4');
 			getData();
 		})
+		window.addEventListener('reload',function(event){
+		   plus.webview.currentWebview().reload();
+		});
 		mui('.mui-scroll-wrapper').scroll({
 			 scrollY: true, //是否竖向滚动
 			 scrollX: false, //是否横向滚动
